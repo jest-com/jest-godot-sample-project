@@ -1,0 +1,460 @@
+[gd_scene format=3 uid="uid://d0qrr1vrux734"]
+
+[ext_resource type="Script" uid="uid://bb28sgxgay5cr" path="res://main.gd" id="1"]
+[ext_resource type="Theme" path="res://theme.tres" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="toast_bg"]
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+bg_color = Color(0.1, 0.1, 0.12, 0.92)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2")
+script = ExtResource("1")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="ContentVBox" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Jest SDK Demo"
+
+[node name="Sep0" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+
+[node name="LoginHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Login"
+
+[node name="LoginPayloadLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Payload"
+
+[node name="LoginPayloadInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "JSON payload (optional)"
+
+[node name="LoginButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Login"
+
+[node name="Sep0b" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+
+[node name="RegisterHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Register"
+
+[node name="DebugRegisterButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Register Random"
+
+[node name="Sep1" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+
+[node name="PlayerViewHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Player Game State"
+
+[node name="PlayerDataLabel" type="TextEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+text = "(loading...)"
+editable = false
+wrap_mode = 1
+
+[node name="CopyButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Copy"
+
+[node name="Sep1b" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+
+[node name="PlayerStateHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Player State Management"
+
+[node name="AddDataLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Add Player Data"
+
+[node name="AddRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="KeyInput" type="LineEdit" parent="ScrollContainer/ContentVBox/AddRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Key"
+
+[node name="ValueInput" type="LineEdit" parent="ScrollContainer/ContentVBox/AddRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Value"
+
+[node name="AddButton" type="Button" parent="ScrollContainer/ContentVBox/AddRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add"
+
+[node name="DeleteDataLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Delete Player Data"
+
+[node name="DeleteRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DeleteKeyInput" type="LineEdit" parent="ScrollContainer/ContentVBox/DeleteRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Key to delete"
+
+[node name="DeleteButton" type="Button" parent="ScrollContainer/ContentVBox/DeleteRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete"
+
+[node name="ButtonRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FlushButton" type="Button" parent="ScrollContainer/ContentVBox/ButtonRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Flush"
+
+[node name="GetSignedButton" type="Button" parent="ScrollContainer/ContentVBox/ButtonRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Get Signed"
+
+[node name="Sep2" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+
+[node name="NotifHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Rich Notifications"
+
+[node name="NotifBodyLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Body"
+
+[node name="NotifBodyInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Notification body"
+
+[node name="NotifCtaLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "CTA Text"
+
+[node name="NotifCtaInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "CTA text (1-25 chars)"
+
+[node name="NotifImageLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Image Reference"
+
+[node name="NotifImageInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Image reference"
+
+[node name="NotifIdLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Identifier"
+
+[node name="NotifIdentifierInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Unique identifier"
+
+[node name="NotifPayloadLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Entry Payload"
+
+[node name="NotifEntryPayloadInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Entry payload JSON (optional)"
+
+[node name="NotifPriorityLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Priority"
+
+[node name="PriorityOption" type="OptionButton" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NotifScheduleLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Schedule Mode"
+
+[node name="ScheduleModeOption" type="OptionButton" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MinutesRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MinutesLabel" type="Label" parent="ScrollContainer/ContentVBox/MinutesRow"]
+layout_mode = 2
+text = "Minutes from now:"
+
+[node name="MinutesInput" type="LineEdit" parent="ScrollContainer/ContentVBox/MinutesRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "e.g. 30"
+
+[node name="DaysRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DaysLabel" type="Label" parent="ScrollContainer/ContentVBox/DaysRow"]
+layout_mode = 2
+text = "Days from now (1-7):"
+
+[node name="DaysInput" type="LineEdit" parent="ScrollContainer/ContentVBox/DaysRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "e.g. 1"
+
+[node name="ScheduleButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Schedule Notification"
+
+[node name="Sep2b" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+
+[node name="UnscheduleHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Unschedule Notification"
+
+[node name="UnscheduleIdLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Identifier"
+
+[node name="UnscheduleIdInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Notification identifier"
+
+[node name="UnscheduleButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Unschedule"
+
+[node name="Sep3" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+
+[node name="PaymentsHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Payments"
+
+[node name="LoadProductsButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load Products"
+
+[node name="ProductsContainer" type="VBoxContainer" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LoadIncompleteButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load Incomplete Purchases"
+
+[node name="IncompleteContainer" type="VBoxContainer" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Sep4" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+
+[node name="ReferralsHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Referrals"
+
+[node name="RefReferenceLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Reference"
+
+[node name="RefReferenceInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Reference"
+
+[node name="RefPayloadLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Entry Payload"
+
+[node name="RefEntryPayloadInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Entry payload JSON (optional)"
+
+[node name="RefSlugLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Onboarding Slug"
+
+[node name="RefOnboardingSlugInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Onboarding slug (optional)"
+
+[node name="OpenDialogButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Create Referral Link"
+
+[node name="Sep4b" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+layout_mode = 2
+
+[node name="ListReferralsButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "View My Referral Links"
+
+[node name="ReferralsOutputLabel" type="RichTextLabel" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+fit_content = true
+scroll_active = false
+
+[node name="BottomSpacer" type="Control" parent="ScrollContainer/ContentVBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LoadingOverlay" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="CenterContainer" type="CenterContainer" parent="LoadingOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpinnerLabel" type="Label" parent="LoadingOverlay/CenterContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Loading..."
+
+[node name="ToastContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -80.0
+offset_right = 150.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("toast_bg")
+
+[node name="ToastLabel" type="Label" parent="ToastContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 2
