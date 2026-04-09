@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d0qrr1vrux734"]
 
 [ext_resource type="Script" uid="uid://bb28sgxgay5cr" path="res://main.gd" id="1"]
-[ext_resource type="Theme" path="res://theme.tres" id="2"]
+[ext_resource type="Theme" uid="uid://b3a4jkr56om77" path="res://theme.tres" id="2"]
 
 [sub_resource type="StyleBoxFlat" id="toast_bg"]
 content_margin_left = 20.0
@@ -14,7 +14,7 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=1074347401]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +24,7 @@ grow_vertical = 2
 theme = ExtResource("2")
 script = ExtResource("1")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1889083603]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,381 +37,381 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 0
 
-[node name="ContentVBox" type="VBoxContainer" parent="ScrollContainer"]
+[node name="ContentVBox" type="VBoxContainer" parent="ScrollContainer" unique_id=1755415472]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="TitleLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="TitleLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=1463752655]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Jest SDK Demo"
 
-[node name="Sep0" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+[node name="Sep0" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=2013332098]
 layout_mode = 2
 
-[node name="LoginHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="LoginHeading" type="Label" parent="ScrollContainer/ContentVBox" unique_id=1688579758]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Login"
 
-[node name="LoginPayloadLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="LoginPayloadLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=536962271]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Payload"
 
-[node name="LoginPayloadInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="LoginPayloadInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=1122371058]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "JSON payload (optional)"
 
-[node name="LoginButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="LoginButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=1651299933]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Login"
 
-[node name="Sep0b" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+[node name="Sep0b" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=1062371671]
 layout_mode = 2
 
-[node name="RegisterHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="RegisterHeading" type="Label" parent="ScrollContainer/ContentVBox" unique_id=1544838305]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Register"
 
-[node name="DebugRegisterButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="DebugRegisterButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=2000345351]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Register Random"
 
-[node name="Sep1" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+[node name="Sep1" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=169371309]
 layout_mode = 2
 
-[node name="PlayerViewHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="PlayerViewHeading" type="Label" parent="ScrollContainer/ContentVBox" unique_id=287243065]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Player Game State"
 
-[node name="PlayerDataLabel" type="TextEdit" parent="ScrollContainer/ContentVBox"]
+[node name="PlayerDataLabel" type="TextEdit" parent="ScrollContainer/ContentVBox" unique_id=97243376]
 unique_name_in_owner = true
-layout_mode = 2
 custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
 text = "(loading...)"
 editable = false
 wrap_mode = 1
 
-[node name="CopyButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="CopyButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=1380704651]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Copy"
 
-[node name="Sep1b" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+[node name="Sep1b" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=259307422]
 layout_mode = 2
 
-[node name="PlayerStateHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="PlayerStateHeading" type="Label" parent="ScrollContainer/ContentVBox" unique_id=1975573692]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Player State Management"
 
-[node name="AddDataLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="AddDataLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=2096471120]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Add Player Data"
 
-[node name="AddRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+[node name="AddRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox" unique_id=1690480354]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="KeyInput" type="LineEdit" parent="ScrollContainer/ContentVBox/AddRow"]
+[node name="KeyInput" type="LineEdit" parent="ScrollContainer/ContentVBox/AddRow" unique_id=167961624]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Key"
 
-[node name="ValueInput" type="LineEdit" parent="ScrollContainer/ContentVBox/AddRow"]
+[node name="ValueInput" type="LineEdit" parent="ScrollContainer/ContentVBox/AddRow" unique_id=1561410219]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Value"
 
-[node name="AddButton" type="Button" parent="ScrollContainer/ContentVBox/AddRow"]
+[node name="AddButton" type="Button" parent="ScrollContainer/ContentVBox/AddRow" unique_id=719073918]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Add"
 
-[node name="DeleteDataLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="DeleteDataLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=933049140]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Delete Player Data"
 
-[node name="DeleteRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+[node name="DeleteRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox" unique_id=160176893]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="DeleteKeyInput" type="LineEdit" parent="ScrollContainer/ContentVBox/DeleteRow"]
+[node name="DeleteKeyInput" type="LineEdit" parent="ScrollContainer/ContentVBox/DeleteRow" unique_id=1196868202]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Key to delete"
 
-[node name="DeleteButton" type="Button" parent="ScrollContainer/ContentVBox/DeleteRow"]
+[node name="DeleteButton" type="Button" parent="ScrollContainer/ContentVBox/DeleteRow" unique_id=1787069134]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Delete"
 
-[node name="ButtonRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+[node name="ButtonRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox" unique_id=40555565]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="FlushButton" type="Button" parent="ScrollContainer/ContentVBox/ButtonRow"]
+[node name="FlushButton" type="Button" parent="ScrollContainer/ContentVBox/ButtonRow" unique_id=1581829513]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Flush"
 
-[node name="GetSignedButton" type="Button" parent="ScrollContainer/ContentVBox/ButtonRow"]
+[node name="GetSignedButton" type="Button" parent="ScrollContainer/ContentVBox/ButtonRow" unique_id=765383688]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Get Signed"
 
-[node name="Sep2" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+[node name="Sep2" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=939871856]
 layout_mode = 2
 
-[node name="NotifHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="NotifHeading" type="Label" parent="ScrollContainer/ContentVBox" unique_id=230107257]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Rich Notifications"
 
-[node name="NotifBodyLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="NotifBodyLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=445978133]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Body"
 
-[node name="NotifBodyInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="NotifBodyInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=1589469426]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Notification body"
 
-[node name="NotifCtaLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="NotifCtaLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=1255241816]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "CTA Text"
 
-[node name="NotifCtaInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="NotifCtaInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=1796868262]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "CTA text (1-25 chars)"
 
-[node name="NotifImageLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="NotifImageLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=813825941]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Image Reference"
 
-[node name="NotifImageInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="NotifImageInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=97049680]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Image reference"
 
-[node name="NotifIdLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="NotifIdLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=1052266893]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Identifier"
 
-[node name="NotifIdentifierInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="NotifIdentifierInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=841781367]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Unique identifier"
 
-[node name="NotifPayloadLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="NotifPayloadLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=1606904033]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Entry Payload"
 
-[node name="NotifEntryPayloadInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="NotifEntryPayloadInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=867559289]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Entry payload JSON (optional)"
 
-[node name="NotifPriorityLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="NotifPriorityLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=983839159]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Priority"
 
-[node name="PriorityOption" type="OptionButton" parent="ScrollContainer/ContentVBox"]
+[node name="PriorityOption" type="OptionButton" parent="ScrollContainer/ContentVBox" unique_id=509093151]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="NotifScheduleLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="NotifScheduleLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=312856617]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Schedule Mode"
 
-[node name="ScheduleModeOption" type="OptionButton" parent="ScrollContainer/ContentVBox"]
+[node name="ScheduleModeOption" type="OptionButton" parent="ScrollContainer/ContentVBox" unique_id=1643848754]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="MinutesRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+[node name="MinutesRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox" unique_id=1464634351]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="MinutesLabel" type="Label" parent="ScrollContainer/ContentVBox/MinutesRow"]
+[node name="MinutesLabel" type="Label" parent="ScrollContainer/ContentVBox/MinutesRow" unique_id=1337873703]
 layout_mode = 2
 text = "Minutes from now:"
 
-[node name="MinutesInput" type="LineEdit" parent="ScrollContainer/ContentVBox/MinutesRow"]
+[node name="MinutesInput" type="LineEdit" parent="ScrollContainer/ContentVBox/MinutesRow" unique_id=75400006]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "e.g. 30"
 
-[node name="DaysRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox"]
+[node name="DaysRow" type="HBoxContainer" parent="ScrollContainer/ContentVBox" unique_id=419216401]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="DaysLabel" type="Label" parent="ScrollContainer/ContentVBox/DaysRow"]
+[node name="DaysLabel" type="Label" parent="ScrollContainer/ContentVBox/DaysRow" unique_id=899946233]
 layout_mode = 2
 text = "Days from now (1-7):"
 
-[node name="DaysInput" type="LineEdit" parent="ScrollContainer/ContentVBox/DaysRow"]
+[node name="DaysInput" type="LineEdit" parent="ScrollContainer/ContentVBox/DaysRow" unique_id=1843631468]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "e.g. 1"
 
-[node name="ScheduleButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="ScheduleButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=1398664487]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Schedule Notification"
 
-[node name="Sep2b" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+[node name="Sep2b" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=1795597474]
 layout_mode = 2
 
-[node name="UnscheduleHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="UnscheduleHeading" type="Label" parent="ScrollContainer/ContentVBox" unique_id=72901387]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Unschedule Notification"
 
-[node name="UnscheduleIdLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="UnscheduleIdLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=337958167]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Identifier"
 
-[node name="UnscheduleIdInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="UnscheduleIdInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=404087963]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Notification identifier"
 
-[node name="UnscheduleButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="UnscheduleButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=1915205901]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Unschedule"
 
-[node name="Sep3" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+[node name="Sep3" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=57391467]
 layout_mode = 2
 
-[node name="PaymentsHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="PaymentsHeading" type="Label" parent="ScrollContainer/ContentVBox" unique_id=736455822]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Payments"
 
-[node name="LoadProductsButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="LoadProductsButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=1162401301]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Load Products"
 
-[node name="ProductsContainer" type="VBoxContainer" parent="ScrollContainer/ContentVBox"]
+[node name="ProductsContainer" type="VBoxContainer" parent="ScrollContainer/ContentVBox" unique_id=1986618547]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="LoadIncompleteButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="LoadIncompleteButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=1462295286]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Load Incomplete Purchases"
 
-[node name="IncompleteContainer" type="VBoxContainer" parent="ScrollContainer/ContentVBox"]
+[node name="IncompleteContainer" type="VBoxContainer" parent="ScrollContainer/ContentVBox" unique_id=983236752]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Sep4" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+[node name="Sep4" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=1311652806]
 layout_mode = 2
 
-[node name="ReferralsHeading" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="ReferralsHeading" type="Label" parent="ScrollContainer/ContentVBox" unique_id=965767991]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Referrals"
 
-[node name="RefReferenceLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="RefReferenceLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=674123722]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Reference"
 
-[node name="RefReferenceInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="RefReferenceInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=2064476551]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Reference"
 
-[node name="RefPayloadLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="RefPayloadLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=663836469]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Entry Payload"
 
-[node name="RefEntryPayloadInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="RefEntryPayloadInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=784771223]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Entry payload JSON (optional)"
 
-[node name="RefSlugLabel" type="Label" parent="ScrollContainer/ContentVBox"]
+[node name="RefSlugLabel" type="Label" parent="ScrollContainer/ContentVBox" unique_id=469204316]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Onboarding Slug"
 
-[node name="RefOnboardingSlugInput" type="LineEdit" parent="ScrollContainer/ContentVBox"]
+[node name="RefOnboardingSlugInput" type="LineEdit" parent="ScrollContainer/ContentVBox" unique_id=205969534]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Onboarding slug (optional)"
 
-[node name="OpenDialogButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="OpenDialogButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=1130529498]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Create Referral Link"
 
-[node name="Sep4b" type="HSeparator" parent="ScrollContainer/ContentVBox"]
+[node name="Sep4b" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=1768963666]
 layout_mode = 2
 
-[node name="ListReferralsButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="ListReferralsButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=929456690]
 unique_name_in_owner = true
 layout_mode = 2
 text = "View My Referral Links"
 
-[node name="ReferralsOutputLabel" type="RichTextLabel" parent="ScrollContainer/ContentVBox"]
+[node name="ReferralsOutputLabel" type="RichTextLabel" parent="ScrollContainer/ContentVBox" unique_id=1172149821]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 fit_content = true
 scroll_active = false
 
-[node name="BottomSpacer" type="Control" parent="ScrollContainer/ContentVBox"]
+[node name="BottomSpacer" type="Control" parent="ScrollContainer/ContentVBox" unique_id=2040075605]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="LoadingOverlay" type="ColorRect" parent="."]
+[node name="LoadingOverlay" type="ColorRect" parent="." unique_id=702406942]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -422,7 +422,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.5)
 
-[node name="CenterContainer" type="CenterContainer" parent="LoadingOverlay"]
+[node name="CenterContainer" type="CenterContainer" parent="LoadingOverlay" unique_id=563292074]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -430,12 +430,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SpinnerLabel" type="Label" parent="LoadingOverlay/CenterContainer"]
+[node name="SpinnerLabel" type="Label" parent="LoadingOverlay/CenterContainer" unique_id=1430534572]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Loading..."
 
-[node name="ToastContainer" type="PanelContainer" parent="."]
+[node name="ToastContainer" type="PanelContainer" parent="." unique_id=1949789359]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -453,7 +453,7 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("toast_bg")
 
-[node name="ToastLabel" type="Label" parent="ToastContainer"]
+[node name="ToastLabel" type="Label" parent="ToastContainer" unique_id=1836092173]
 unique_name_in_owner = true
 layout_mode = 2
 horizontal_alignment = 1

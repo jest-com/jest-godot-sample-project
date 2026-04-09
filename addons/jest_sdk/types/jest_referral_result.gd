@@ -1,7 +1,7 @@
 class_name JestReferralResult
 extends JestResult
 
-## Array of referral entries: [{reference: String, registrations: int}]
+## Array of referral entries: [{reference: String, registrations: [{playerId: String, joinedAt: String}]}]
 var referrals: Array[Dictionary] = []
 ## Signed token for server-side verification.
 var referrals_signed: String = ""
