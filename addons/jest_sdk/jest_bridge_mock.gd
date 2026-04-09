@@ -75,7 +75,7 @@ func get_products() -> String:
 func get_purchase_response() -> String:
 	_log("begin_purchase")
 	if mock_purchase_succeeds:
-		return '{"result":"success","purchase":{"purchaseToken":"mock_token","productSku":"gems_100","credits":99,"createdAt":1761729039,"completedAt":null},"purchaseSigned":"mock_jws"}'
+		return '{"result":"success","purchase":{"purchaseToken":"mock_token","productSku":"gems_100","credits":99,"createdAt":1761729039,"completedAt":null,"estimatedRevenue":69.30},"purchaseSigned":"mock_jws"}'
 	else:
 		return '{"result":"cancel"}'
 

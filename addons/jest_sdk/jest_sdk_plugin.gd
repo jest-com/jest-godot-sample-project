@@ -3,7 +3,7 @@ extends EditorPlugin
 
 const AUTOLOAD_NAME = "JestSDK"
 const AUTOLOAD_PATH = "res://addons/jest_sdk/jest_sdk.gd"
-const JESTSDK_JS_PATH = "res://addons/jest_sdk/jestsdk.js"
+const JESTSDK_CDN_URL = "https://cdn.jest.com/sdk/latest/jestsdk.js"
 const PLUGIN_CFG_PATH = "res://addons/jest_sdk/plugin.cfg"
 
 var _export_plugin: JestExportPlugin
@@ -59,24 +59,6 @@ class JestExportPlugin extends EditorExportPlugin:
 			_export_path = ""
 			return
 
-		# Read jestsdk.js
-		if not FileAccess.file_exists(JESTSDK_JS_PATH):
-			push_warning("[JestSDK] jestsdk.js not found at %s. The SDK will not work in the exported build." % JESTSDK_JS_PATH)
-			_export_path = ""
-			return
-		var js_file := FileAccess.open(JESTSDK_JS_PATH, FileAccess.READ)
-		if js_file == null:
-			push_warning("[JestSDK] Could not read jestsdk.js")
-			_export_path = ""
-			return
-		var js_content := js_file.get_as_text()
-		js_file.close()
-
-		if js_content.is_empty():
-			push_warning("[JestSDK] jestsdk.js is empty. The SDK will not work.")
-			_export_path = ""
-			return
-
 		# Read plugin version from plugin.cfg
 		var sdk_version := "unknown"
 		var cfg := ConfigFile.new()
@@ -106,7 +88,7 @@ window.__jestDataHelper = {
 """ % sdk_version
 
 		# Inject the SDK script + helper into <head> — right before </head>
-		var script_tag := "\n<!-- Jest SDK -->\n<script>\n" + js_content + "\n" + helper_js + "\n</script>\n"
+		var script_tag := "\n<!-- Jest SDK -->\n<script src=\"" + JESTSDK_CDN_URL + "\"></script>\n<script>\n" + helper_js + "\n</script>\n"
 		var modified_html := html_content.substr(0, insert_pos) + script_tag + html_content.substr(insert_pos)
 
 		# Verify injection

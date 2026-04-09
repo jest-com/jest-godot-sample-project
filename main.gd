@@ -420,7 +420,8 @@ func _on_list_referrals_pressed():
 	else:
 		var lines: PackedStringArray = []
 		for ref in result.referrals:
-			lines.append("%s: %d registrations" % [ref.get("reference", ""), ref.get("registrations", 0)])
+			var regs = ref.get("registrations", [])
+			lines.append("%s: %d registrations" % [ref.get("reference", ""), regs.size()])
 		referrals_output_label.text = "\n".join(lines)
 
 	_show_toast("Loaded %d referrals" % result.referrals.size())
