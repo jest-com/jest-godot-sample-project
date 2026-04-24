@@ -7,6 +7,8 @@ var verbose: bool = false
 ## Configure mock player state.
 var player_id: String = "mock-player-id"
 var is_registered: bool = true
+var username: String = ""
+var avatar_url: String = ""
 
 ## Mock player data as a computed JSON string.
 var player_data: String:
@@ -109,4 +111,4 @@ func redirect_to_explore_page() -> void:
 
 func get_player_signed_response() -> String:
 	_log("get_player_signed")
-	return '{"player":{"playerId":"%s","registered":%s},"playerSigned":"mock_signed_data"}' % [player_id, str(is_registered).to_lower()]
+	return '{"player":{"playerId":"%s","registered":%s,"username":null,"avatarUrl":null},"playerSigned":"mock_signed_data"}' % [player_id, str(is_registered).to_lower()]

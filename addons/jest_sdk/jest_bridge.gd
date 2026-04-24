@@ -21,6 +21,9 @@ var is_initialized: bool:
 var _pending_callbacks: Dictionary = {}
 var _next_callback_id: int = 0
 
+# Live JS registration-overlay handles keyed by conversationId.
+var _overlay_handles: Dictionary = {}
+
 # Cached references to JS objects
 var _sdk: JavaScriptObject         # window.JestSDK
 var _sdk_data: JavaScriptObject    # window.JestSDK.data
@@ -133,6 +136,26 @@ func get_is_registered() -> bool:
 	if player == null:
 		return false
 	return bool(player.registered)
+
+
+func get_player_username() -> String:
+	if not _is_web:
+		return _mock.username
+	var player = _sdk.getPlayer()
+	if player == null:
+		return ""
+	var val = player.username
+	return val if val is String else ""
+
+
+func get_player_avatar_url() -> String:
+	if not _is_web:
+		return _mock.avatar_url
+	var player = _sdk.getPlayer()
+	if player == null:
+		return ""
+	var val = player.avatarUrl
+	return val if val is String else ""
 
 
 func get_player_value(key: String) -> String:
@@ -417,6 +440,84 @@ func validate_name(name_value: String) -> Dictionary:
 	var cb_id := _generate_callback_id()
 	_setup_promise_callback(promise, cb_id, true)
 	return await _wait_for_callback(cb_id, TIMEOUT_DEFAULT)
+
+
+# --- Registration overlay bridge ---
+
+func show_registration_overlay(options: JestRegistrationOverlayOptions) -> JestRegistrationOverlayHandle:
+	var conversation_id := _generate_conversation_id()
+	var handle := JestRegistrationOverlayHandle.new(self, conversation_id)
+
+	if not _is_web:
+		if _verbose:
+			print("[JestSDK] show_registration_overlay (mock) conversation=%s" % conversation_id)
+		# Mock mode: immediately report closed so games can exercise their flow.
+		if _scene_tree:
+			_scene_tree.create_timer(0.0).timeout.connect(func(): handle._on_closed())
+		else:
+			handle._on_closed()
+		return handle
+
+	var opts_js = JavaScriptBridge.create_object("Object")
+	opts_js.conversationId = conversation_id
+	if options != null:
+		opts_js.theme = options.theme
+		if not options.entry_payload.is_empty():
+			opts_js.entryPayload = _parse_json_to_js(JSON.stringify(options.entry_payload))
+
+	var close_cb = JavaScriptBridge.create_callback(func(_args: Array):
+		_overlay_handles.erase(conversation_id)
+		_active_callbacks.erase(conversation_id + "_close")
+		handle._on_closed()
+	)
+	opts_js.onClose = close_cb
+	_active_callbacks[conversation_id + "_close"] = [close_cb]
+
+	var overlay_handle = _sdk.showRegistrationOverlay(opts_js)
+	if overlay_handle == null:
+		push_error("[JestSDK] showRegistrationOverlay returned null")
+		handle._on_error("no_handle")
+		return handle
+
+	# Keep the live JS handle around so login/dismiss actions can invoke it.
+	_overlay_handles[conversation_id] = overlay_handle
+	return handle
+
+
+func registration_overlay_login(conversation_id: String) -> void:
+	if not _is_web:
+		if _verbose:
+			print("[JestSDK] registration_overlay_login (mock) conversation=%s" % conversation_id)
+		return
+	var overlay_handle = _overlay_handles.get(conversation_id)
+	if overlay_handle == null:
+		push_warning("[JestSDK] No active registration overlay for conversation %s" % conversation_id)
+		return
+	overlay_handle.loginButtonAction()
+
+
+func registration_overlay_dismiss() -> void:
+	if not _is_web:
+		if _verbose:
+			print("[JestSDK] registration_overlay_dismiss (mock)")
+		return
+	# Envelope carries no conversationId; dismiss the most-recently opened overlay.
+	if _overlay_handles.is_empty():
+		push_warning("[JestSDK] No active registration overlay to dismiss")
+		return
+	var keys := _overlay_handles.keys()
+	var overlay_handle = _overlay_handles[keys[keys.size() - 1]]
+	if overlay_handle != null:
+		overlay_handle.closeButtonAction()
+
+
+func _generate_conversation_id() -> String:
+	# UUID v4 from 16 random bytes, with RFC 4122 version/variant bits set.
+	var bytes := Crypto.new().generate_random_bytes(16)
+	bytes[6] = (bytes[6] & 0x0f) | 0x40
+	bytes[8] = (bytes[8] & 0x3f) | 0x80
+	var hex := bytes.hex_encode()
+	return "%s-%s-%s-%s-%s" % [hex.substr(0, 8), hex.substr(8, 4), hex.substr(12, 4), hex.substr(16, 4), hex.substr(20, 12)]
 
 
 # --- Internal helpers ---
