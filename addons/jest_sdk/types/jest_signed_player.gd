@@ -5,6 +5,10 @@ extends JestResult
 var player_id: String = ""
 ## Whether the player is registered.
 var registered: bool = false
+## The player's display username, or empty string if not set.
+var username: String = ""
+## The player's avatar URL, or empty string if not set.
+var avatar_url: String = ""
 ## Signed token for server-side verification.
 var player_signed: String = ""
 
@@ -16,6 +20,10 @@ static func from_dict(d: Dictionary) -> JestSignedPlayer:
 	if player_data is Dictionary:
 		r.player_id = str(player_data.get("playerId", ""))
 		r.registered = bool(player_data.get("registered", false))
+		var uname = player_data.get("username", "")
+		r.username = str(uname) if uname != null else ""
+		var av = player_data.get("avatarUrl", "")
+		r.avatar_url = str(av) if av != null else ""
 	r.player_signed = str(d.get("playerSigned", ""))
 	return r
 

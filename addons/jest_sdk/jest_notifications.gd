@@ -22,8 +22,12 @@ func schedule(options: JestNotificationOptions) -> void:
 	payload["priority"] = options.priority
 	payload["identifier"] = options.identifier
 
-	if not options.image_reference.is_empty():
-		payload["imageReference"] = options.image_reference
+	if not options.title.is_empty():
+		payload["title"] = options.title
+	# asset_reference is preferred; fall back to image_reference for compatibility.
+	var resolved_asset_ref := options.asset_reference if not options.asset_reference.is_empty() else options.image_reference
+	if not resolved_asset_ref.is_empty():
+		payload["assetReference"] = resolved_asset_ref
 	if not options.entry_payload.is_empty():
 		payload["entryPayload"] = options.entry_payload
 	if options.scheduled_in_days > 0:

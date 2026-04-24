@@ -3,13 +3,17 @@ extends Resource
 
 ## Notification body text (required).
 @export var body: String = ""
+## Optional title shown above the body.
+@export var title: String = ""
 ## Call-to-action button text, max 25 chars (required).
 @export var cta_text: String = ""
 ## Unique identifier for rescheduling/unscheduling (required).
 @export var identifier: String = ""
 ## Notification importance level.
-@export_enum("low", "medium", "high") var priority: String = "low"
-## Pre-approved image reference.
+@export_enum("low", "medium", "high", "critical") var priority: String = "low"
+## Pre-approved asset reference (image or video). Preferred over image_reference.
+@export var asset_reference: String = ""
+## Deprecated. Use asset_reference instead.
 @export var image_reference: String = ""
 ## Custom data payload passed when the notification is opened.
 @export var entry_payload: Dictionary = {}

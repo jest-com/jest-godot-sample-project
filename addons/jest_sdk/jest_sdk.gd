@@ -34,6 +34,9 @@ var navigation: JestNavigation
 ## These methods may change without notice.
 var internal_api: JestInternal
 
+## Provides access to the platform registration overlay flow.
+var registration_overlay: JestRegistrationOverlay
+
 ## Access to mock configuration. Only available in non-web mode (returns null otherwise).
 var mock: JestBridgeMock:
 	get: return _bridge._mock if not _bridge._is_web else null
@@ -52,6 +55,7 @@ func _ready() -> void:
 	referrals = JestReferrals.new(_bridge)
 	navigation = JestNavigation.new(_bridge)
 	internal_api = JestInternal.new(_bridge)
+	registration_overlay = JestRegistrationOverlay.new(_bridge)
 
 
 ## Initializes the Jest SDK and ensures it's ready for use.

@@ -7,6 +7,8 @@ var _on_data_changed: Callable
 # Cache for frequently-accessed properties
 var _cached_id: String = ""
 var _cached_is_registered: bool = false
+var _cached_username: String = ""
+var _cached_avatar_url: String = ""
 var _cache_valid: bool = false
 
 
@@ -28,6 +30,20 @@ var is_registered: bool:
 		if not _cache_valid:
 			_refresh_cache()
 		return _cached_is_registered
+
+## Gets the player's display username, or empty string if not set.
+var username: String:
+	get:
+		if not _cache_valid:
+			_refresh_cache()
+		return _cached_username
+
+## Gets the player's avatar URL, or empty string if not set.
+var avatar_url: String:
+	get:
+		if not _cache_valid:
+			_refresh_cache()
+		return _cached_avatar_url
 
 
 ## Retrieves a string value associated with the specified key.
@@ -168,6 +184,8 @@ func invalidate_cache() -> void:
 func _refresh_cache() -> void:
 	_cached_id = _bridge.get_player_id()
 	_cached_is_registered = _bridge.get_is_registered()
+	_cached_username = _bridge.get_player_username()
+	_cached_avatar_url = _bridge.get_player_avatar_url()
 	_cache_valid = true
 
 
