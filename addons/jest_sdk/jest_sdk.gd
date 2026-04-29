@@ -93,6 +93,12 @@ func login(payload: Dictionary = {}) -> void:
 	player.invalidate_cache()
 
 
+## Shows the platform registration overlay and returns actions that game UI can
+## wire to login and close buttons.
+func show_registration_overlay(options: JestRegistrationOverlayOptions = null) -> JestRegistrationOverlayHandle:
+	return registration_overlay.show(options)
+
+
 ## Opens the privacy policy page.
 func open_privacy_policy() -> void:
 	_bridge.open_legal_page("privacy")

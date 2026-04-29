@@ -38,7 +38,7 @@ func login_button_action() -> void:
 func close_button_action() -> void:
 	if _is_closed:
 		return
-	_bridge.registration_overlay_dismiss()
+	_bridge.registration_overlay_dismiss(_conversation_id)
 
 
 ## Internal: fires the closed signal once when the platform reports closure.
