@@ -43,6 +43,10 @@ extends Control
 
 # Debug
 @onready var debug_register_button: Button = %DebugRegisterButton
+@onready var show_registration_overlay_button: Button = %ShowRegistrationOverlayButton
+@onready var custom_registration_overlay: ColorRect = %CustomRegistrationOverlay
+@onready var custom_registration_login_button: Button = %CustomRegistrationLoginButton
+@onready var custom_registration_close_button: Button = %CustomRegistrationCloseButton
 
 # Referrals
 @onready var ref_reference_input: LineEdit = %RefReferenceInput
@@ -59,6 +63,7 @@ extends Control
 
 # --- State ---
 var _toast_tween: Tween
+var _registration_overlay_handle: JestRegistrationOverlayHandle
 
 
 # --- Lifecycle ---
@@ -114,6 +119,9 @@ func _connect_signals():
 
 	# Debug
 	debug_register_button.pressed.connect(_on_debug_register_pressed)
+	show_registration_overlay_button.pressed.connect(_on_show_registration_overlay_pressed)
+	custom_registration_login_button.pressed.connect(_on_custom_registration_login_pressed)
+	custom_registration_close_button.pressed.connect(_on_custom_registration_close_pressed)
 
 	# Referrals
 	open_dialog_button.pressed.connect(_on_open_dialog_pressed)
@@ -371,6 +379,50 @@ func _on_unschedule_pressed():
 func _on_debug_register_pressed():
 	JestSDK.debug_register()
 	_show_toast("Debug register called")
+
+
+func _on_show_registration_overlay_pressed():
+	if _registration_overlay_handle != null and not _registration_overlay_handle.is_closed:
+		custom_registration_overlay.visible = true
+		return
+
+	var opts := JestRegistrationOverlayOptions.new()
+	opts.theme = "dark"
+	opts.entry_payload = {"source": "godot_sample_registration_overlay"}
+	opts.on_close = func():
+		custom_registration_overlay.visible = false
+		_registration_overlay_handle = null
+		_show_toast("Registration popup closed")
+
+	custom_registration_overlay.visible = true
+	_registration_overlay_handle = JestSDK.show_registration_overlay(opts)
+	if _registration_overlay_handle == null:
+		custom_registration_overlay.visible = false
+		_show_toast("Registration popup failed")
+		return
+	_registration_overlay_handle.errored.connect(func(message: String):
+		custom_registration_overlay.visible = false
+		_show_toast("Registration popup error: %s" % message)
+	)
+	if _registration_overlay_handle.is_closed:
+		_registration_overlay_handle = null
+	_show_toast("Registration popup shown")
+
+
+func _on_custom_registration_login_pressed():
+	if _registration_overlay_handle == null or _registration_overlay_handle.is_closed:
+		custom_registration_overlay.visible = false
+		_show_toast("Show the registration popup first")
+		return
+	_registration_overlay_handle.login_button_action()
+
+
+func _on_custom_registration_close_pressed():
+	custom_registration_overlay.visible = false
+	if _registration_overlay_handle == null or _registration_overlay_handle.is_closed:
+		_registration_overlay_handle = null
+		return
+	_registration_overlay_handle.close_button_action()
 
 
 # --- Referrals ---

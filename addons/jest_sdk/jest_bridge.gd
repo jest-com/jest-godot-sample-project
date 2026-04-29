@@ -447,6 +447,8 @@ func validate_name(name_value: String) -> Dictionary:
 func show_registration_overlay(options: JestRegistrationOverlayOptions) -> JestRegistrationOverlayHandle:
 	var conversation_id := _generate_conversation_id()
 	var handle := JestRegistrationOverlayHandle.new(self, conversation_id)
+	if options != null and options.on_close.is_valid():
+		handle.closed.connect(options.on_close)
 
 	if not _is_web:
 		if _verbose:
@@ -496,19 +498,16 @@ func registration_overlay_login(conversation_id: String) -> void:
 	overlay_handle.loginButtonAction()
 
 
-func registration_overlay_dismiss() -> void:
+func registration_overlay_dismiss(conversation_id: String) -> void:
 	if not _is_web:
 		if _verbose:
-			print("[JestSDK] registration_overlay_dismiss (mock)")
+			print("[JestSDK] registration_overlay_dismiss (mock) conversation=%s" % conversation_id)
 		return
-	# Envelope carries no conversationId; dismiss the most-recently opened overlay.
-	if _overlay_handles.is_empty():
-		push_warning("[JestSDK] No active registration overlay to dismiss")
+	var overlay_handle = _overlay_handles.get(conversation_id)
+	if overlay_handle == null:
+		push_warning("[JestSDK] No active registration overlay for conversation %s" % conversation_id)
 		return
-	var keys := _overlay_handles.keys()
-	var overlay_handle = _overlay_handles[keys[keys.size() - 1]]
-	if overlay_handle != null:
-		overlay_handle.closeButtonAction()
+	overlay_handle.closeButtonAction()
 
 
 func _generate_conversation_id() -> String:

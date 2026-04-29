@@ -14,6 +14,22 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="StyleBoxFlat" id="registration_popup_bg"]
+content_margin_left = 24.0
+content_margin_top = 20.0
+content_margin_right = 24.0
+content_margin_bottom = 20.0
+bg_color = Color(0.08, 0.08, 0.1, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.42, 0.48, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [node name="Main" type="Control" unique_id=1074347401]
 layout_mode = 3
 anchors_preset = 15
@@ -83,6 +99,11 @@ text = "Register"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Register Random"
+
+[node name="ShowRegistrationOverlayButton" type="Button" parent="ScrollContainer/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Show Custom Registration Popup"
 
 [node name="Sep1" type="HSeparator" parent="ScrollContainer/ContentVBox" unique_id=169371309]
 layout_mode = 2
@@ -410,6 +431,60 @@ scroll_active = false
 [node name="BottomSpacer" type="Control" parent="ScrollContainer/ContentVBox" unique_id=2040075605]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+
+[node name="CustomRegistrationOverlay" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.58)
+
+[node name="CenterContainer" type="CenterContainer" parent="CustomRegistrationOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CustomRegistrationPopup" type="PanelContainer" parent="CustomRegistrationOverlay/CenterContainer"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("registration_popup_bg")
+
+[node name="Content" type="VBoxContainer" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Join the Club"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content"]
+layout_mode = 2
+text = "Register to save progress, receive updates, and keep playing from any device."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="CustomRegistrationLoginButton" type="Button" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Register"
+
+[node name="CustomRegistrationCloseButton" type="Button" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"
 
 [node name="LoadingOverlay" type="ColorRect" parent="." unique_id=702406942]
 unique_name_in_owner = true
