@@ -1,0 +1,87 @@
+name: Build & Package Web Export
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: 4.6
+  GODOT_RELEASE: stable
+  GODOT_TEMPLATES_DIR: 4.6.stable
+  EXPORT_PRESET: GodotDemo
+  ZIP_NAME: jest-godot-sample-project
+  ZIP_INNER_DIR: jest-godot-sample-project
+
+jobs:
+  build:
+    name: Headless Godot Web Export
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Godot ${{ env.GODOT_VERSION }} (headless Linux)
+        run: |
+          set -euxo pipefail
+          GODOT_TAG="${GODOT_VERSION}-${GODOT_RELEASE}"
+          curl -fL -o godot.zip \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_TAG}/Godot_v${GODOT_TAG}_linux.x86_64.zip"
+          unzip -q godot.zip
+          mv "Godot_v${GODOT_TAG}_linux.x86_64" /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+          godot --version
+
+      - name: Install Web export templates
+        run: |
+          set -euxo pipefail
+          GODOT_TAG="${GODOT_VERSION}-${GODOT_RELEASE}"
+          curl -fL -o templates.tpz \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_TAG}/Godot_v${GODOT_TAG}_export_templates.tpz"
+          mkdir -p "$HOME/.local/share/godot/export_templates/${GODOT_TEMPLATES_DIR}"
+          unzip -q templates.tpz
+          mv templates/* "$HOME/.local/share/godot/export_templates/${GODOT_TEMPLATES_DIR}/"
+
+      - name: Pre-import project resources
+        run: godot --headless --import || true
+
+      - name: Export Web build
+        run: |
+          set -euxo pipefail
+          mkdir -p build/web
+          godot --headless --export-release "${EXPORT_PRESET}" build/web/index.html
+          ls -la build/web
+
+      - name: Verify export produced expected files
+        run: |
+          set -euxo pipefail
+          for f in index.html index.js index.wasm index.pck; do
+            test -s "build/web/$f" || { echo "Missing or empty: build/web/$f"; exit 1; }
+          done
+
+      - name: Stage and zip export output
+        run: |
+          set -euxo pipefail
+          mkdir -p "staging/${ZIP_INNER_DIR}"
+          cp -r build/web/. "staging/${ZIP_INNER_DIR}/"
+          (cd staging && zip -r "../${ZIP_NAME}.zip" "${ZIP_INNER_DIR}")
+
+      - name: Upload as workflow artifact (manual runs)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ZIP_NAME }}
+          path: ${{ env.ZIP_NAME }}.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Attach zip to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ZIP_NAME }}.zip
+          fail_on_unmatched_files: true
