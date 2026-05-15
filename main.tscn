@@ -3,17 +3,6 @@
 [ext_resource type="Script" uid="uid://bb28sgxgay5cr" path="res://main.gd" id="1"]
 [ext_resource type="Theme" uid="uid://b3a4jkr56om77" path="res://theme.tres" id="2"]
 
-[sub_resource type="StyleBoxFlat" id="toast_bg"]
-content_margin_left = 20.0
-content_margin_top = 12.0
-content_margin_right = 20.0
-content_margin_bottom = 12.0
-bg_color = Color(0.1, 0.1, 0.12, 0.92)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
 [sub_resource type="StyleBoxFlat" id="registration_popup_bg"]
 content_margin_left = 24.0
 content_margin_top = 20.0
@@ -25,6 +14,17 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.42, 0.42, 0.48, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="toast_bg"]
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+bg_color = Color(0.1, 0.1, 0.12, 0.92)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -100,7 +100,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Register Random"
 
-[node name="ShowRegistrationOverlayButton" type="Button" parent="ScrollContainer/ContentVBox"]
+[node name="ShowRegistrationOverlayButton" type="Button" parent="ScrollContainer/ContentVBox" unique_id=961646812]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Show Custom Registration Popup"
@@ -432,7 +432,7 @@ scroll_active = false
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="CustomRegistrationOverlay" type="ColorRect" parent="."]
+[node name="CustomRegistrationOverlay" type="ColorRect" parent="." unique_id=344720873]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -443,7 +443,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.58)
 
-[node name="CenterContainer" type="CenterContainer" parent="CustomRegistrationOverlay"]
+[node name="CenterContainer" type="CenterContainer" parent="CustomRegistrationOverlay" unique_id=1375289121]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -455,33 +455,33 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CustomRegistrationPopup" type="PanelContainer" parent="CustomRegistrationOverlay/CenterContainer"]
+[node name="CustomRegistrationPopup" type="PanelContainer" parent="CustomRegistrationOverlay/CenterContainer" unique_id=466903256]
 custom_minimum_size = Vector2(360, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("registration_popup_bg")
 
-[node name="Content" type="VBoxContainer" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup"]
+[node name="Content" type="VBoxContainer" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup" unique_id=1418195849]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content"]
+[node name="Title" type="Label" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content" unique_id=1455869190]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "Join the Club"
 horizontal_alignment = 1
 
-[node name="Body" type="Label" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content"]
+[node name="Body" type="Label" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content" unique_id=746389767]
 layout_mode = 2
 text = "Register to save progress, receive updates, and keep playing from any device."
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="CustomRegistrationLoginButton" type="Button" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content"]
+[node name="CustomRegistrationLoginButton" type="Button" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content" unique_id=1353772375]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Register"
 
-[node name="CustomRegistrationCloseButton" type="Button" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content"]
+[node name="CustomRegistrationCloseButton" type="Button" parent="CustomRegistrationOverlay/CenterContainer/CustomRegistrationPopup/Content" unique_id=220396068]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Close"

@@ -67,8 +67,8 @@ class JestExportPlugin extends EditorExportPlugin:
 
 		# Helper bridge: GDScript's Object.set()/get() shadows JS method calls on
 		# JavaScriptObject, so we expose data methods under collision-free names.
-		# Also patches sdkVersion on outgoing messages (jestsdk.js ships with "unknown").
 		var helper_js := """
+window.__jestSdkVersion = 'godot-sdk-%s';
 window.__jestDataHelper = {
 	getValue: function(k) { return window.JestSDK.data.get(k); },
 	setValue: function(k, v) { window.JestSDK.data.set(k, v); },
@@ -76,15 +76,6 @@ window.__jestDataHelper = {
 	getAll: function() { return window.JestSDK.data.getAll(); },
 	flush: function() { return window.JestSDK.data.flush(); }
 };
-(function() {
-	var origPostMessage = window.parent.postMessage.bind(window.parent);
-	window.parent.postMessage = function(msg, target) {
-		if (msg && msg.source_channel === 'textclub' && msg.sdkVersion === 'unknown') {
-			msg.sdkVersion = 'godot-sdk-%s';
-		}
-		return origPostMessage(msg, target);
-	};
-})();
 """ % sdk_version
 
 		# Inject the SDK script + helper into <head> — right before </head>

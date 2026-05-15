@@ -13,6 +13,10 @@ var created_at: int = 0
 var completed_at: int = 0
 ## The estimated USD share of revenue from this purchase that the publisher will receive.
 var estimated_revenue: float = 0.0
+## Price paid for this purchase in the specified currency, in decimal.
+var price: float = 0.0
+## ISO currency code for the price, e.g. "USD", "EUR".
+var currency: String = ""
 
 
 static func from_dict(d: Dictionary) -> JestPurchase:
@@ -24,4 +28,6 @@ static func from_dict(d: Dictionary) -> JestPurchase:
 	var completed = d.get("completedAt", null)
 	p.completed_at = int(completed) if completed != null else 0
 	p.estimated_revenue = float(d.get("estimatedRevenue", 0.0))
+	p.price = float(d.get("price", 0.0))
+	p.currency = str(d.get("currency", ""))
 	return p

@@ -6,6 +6,7 @@ const TIMEOUT_DEFAULT := 10_000    # 10 seconds
 const TIMEOUT_INIT := 60_000       # 60 seconds
 const TIMEOUT_PURCHASE := 300_000  # 5 minutes (user interaction)
 const TIMEOUT_NONE := -1           # No timeout (flush, share dialog)
+const SDK_VERSION_FALLBACK := "godot-sdk-unknown"
 
 var _is_web: bool = false
 var _mock: JestBridgeMock
@@ -72,6 +73,12 @@ func init_sdk(options: Dictionary = {}) -> bool:
 	var init_opts = JavaScriptBridge.create_object("Object")
 	for key in options:
 		init_opts[key] = options[key]
+	if not options.has("sdkVersion"):
+		var sdk_version = JavaScriptBridge.eval("window.__jestSdkVersion || '%s';" % SDK_VERSION_FALLBACK)
+		if sdk_version is String:
+			init_opts["sdkVersion"] = sdk_version
+		else:
+			init_opts["sdkVersion"] = SDK_VERSION_FALLBACK
 	var init_promise = _sdk.init(init_opts)
 	var cb_id := _generate_callback_id()
 	_setup_promise_callback(init_promise, cb_id)
