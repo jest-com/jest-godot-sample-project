@@ -1,11 +1,15 @@
 class_name JestNotificationOptions
 extends Resource
 
-## Notification body text (required).
+const BODY_CHAR_LIMIT := 2000
+const TITLE_CHAR_LIMIT := 200
+const CTA_CHAR_LIMIT := 50
+
+## Notification body text (required, up to 2000 chars).
 @export var body: String = ""
-## Optional title shown above the body.
+## Optional title shown above the body (up to 200 chars).
 @export var title: String = ""
-## Call-to-action button text, max 25 chars (required).
+## Call-to-action button text (required, up to 50 chars).
 @export var cta_text: String = ""
 ## Unique identifier for rescheduling/unscheduling (required).
 @export var identifier: String = ""
@@ -26,8 +30,10 @@ extends Resource
 ## Validates this options object. Returns empty string if valid, error message otherwise.
 func validate() -> String:
 	if body.is_empty(): return "body is required"
+	if body.length() > BODY_CHAR_LIMIT: return "body must be %d characters or fewer" % BODY_CHAR_LIMIT
+	if title.length() > TITLE_CHAR_LIMIT: return "title must be %d characters or fewer" % TITLE_CHAR_LIMIT
 	if cta_text.is_empty(): return "cta_text is required"
-	if cta_text.length() > 25: return "cta_text must be 25 characters or fewer"
+	if cta_text.length() > CTA_CHAR_LIMIT: return "cta_text must be %d characters or fewer" % CTA_CHAR_LIMIT
 	if identifier.is_empty(): return "identifier is required"
 	var has_date := not date.is_empty()
 	var has_days := scheduled_in_days > 0

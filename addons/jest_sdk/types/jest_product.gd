@@ -7,8 +7,10 @@ var sku: String = ""
 var name: String = ""
 ## Product description.
 var description: String = ""
-## Price in credits.
+## Price in the specified currency, in decimal (e.g. 9.99 for $9.99).
 var price: float = 0.0
+## ISO currency code for the price, e.g. "USD", "EUR".
+var currency: String = ""
 
 
 static func from_dict(d: Dictionary) -> JestProduct:
@@ -17,6 +19,7 @@ static func from_dict(d: Dictionary) -> JestProduct:
 	p.name = str(d.get("name", ""))
 	p.description = str(d.get("description", ""))
 	p.price = float(d.get("price", 0.0))
+	p.currency = str(d.get("currency", ""))
 	return p
 
 

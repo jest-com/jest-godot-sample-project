@@ -64,13 +64,27 @@ extends Control
 # --- State ---
 var _toast_tween: Tween
 var _registration_overlay_handle: JestRegistrationOverlayHandle
+var _bots_username_input: LineEdit
+var _bots_avatar_texture: TextureRect
+var _bots_url_label: Label
+var _bots_http_request: HTTPRequest
+var _player_avatar_texture: TextureRect
+var _player_avatar_url_label: Label
+var _player_avatar_http_request: HTTPRequest
 
+
+# Keeps Cloudflare's resized avatar response on a WebP CORS-enabled variant.
+const AVATAR_REQUEST_HEADERS: PackedStringArray = [
+	"Accept: image/webp,image/png,image/jpeg,*/*",
+]
 
 # --- Lifecycle ---
 
 func _ready():
 	_connect_signals()
 	_setup_dropdowns()
+	_setup_bots_section()
+	_setup_player_avatar_section()
 	_init_sdk()
 
 
@@ -231,7 +245,7 @@ func _create_product_cell(product: JestProduct) -> HBoxContainer:
 	var name_label := Label.new()
 	name_label.text = product.name
 	var desc_label := Label.new()
-	desc_label.text = "%s — $%.2f" % [product.description, product.price / 100.0]
+	desc_label.text = "%s — %.2f %s" % [product.description, product.price, product.currency]
 	desc_label.add_theme_font_size_override("font_size", 12)
 	desc_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
 	info.add_child(name_label)
@@ -478,6 +492,177 @@ func _on_list_referrals_pressed():
 
 	_show_toast("Loaded %d referrals" % result.referrals.size())
 
+
+
+# --- Bots ---
+
+func _setup_bots_section():
+	var content := $ScrollContainer/ContentVBox
+
+	var sep := HSeparator.new()
+	content.add_child(sep)
+
+	var heading := Label.new()
+	heading.text = "Bots"
+	heading.add_theme_font_size_override("font_size", 20)
+	content.add_child(heading)
+
+	var caption := Label.new()
+	caption.text = "Username (seed)"
+	caption.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1))
+	caption.add_theme_font_size_override("font_size", 12)
+	content.add_child(caption)
+
+	_bots_username_input = LineEdit.new()
+	_bots_username_input.placeholder_text = "Bot username (e.g. \"Sparkles\")"
+	_bots_username_input.text = "Sparkles"
+	content.add_child(_bots_username_input)
+
+	var btn := Button.new()
+	btn.text = "Get Bot Avatar"
+	btn.pressed.connect(_on_get_bot_avatar_pressed)
+	content.add_child(btn)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	content.add_child(row)
+
+	_bots_avatar_texture = TextureRect.new()
+	_bots_avatar_texture.custom_minimum_size = Vector2(128, 128)
+	_bots_avatar_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_bots_avatar_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(_bots_avatar_texture)
+
+	_bots_url_label = Label.new()
+	_bots_url_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_bots_url_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_bots_url_label.add_theme_font_size_override("font_size", 11)
+	_bots_url_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1))
+	row.add_child(_bots_url_label)
+
+	_bots_http_request = HTTPRequest.new()
+	add_child(_bots_http_request)
+	_bots_http_request.request_completed.connect(_on_bot_avatar_downloaded)
+
+
+func _on_get_bot_avatar_pressed():
+	var username := _bots_username_input.text.strip_edges()
+	if username.is_empty():
+		_show_toast("Username is required")
+		return
+	var url := JestSDK.get_bot_avatar(username, 128)
+	_bots_url_label.text = url
+	_bots_http_request.cancel_request()
+	var err := _bots_http_request.request(url, AVATAR_REQUEST_HEADERS)
+	if err != OK:
+		_show_toast("Avatar request failed: %d" % err)
+
+
+func _on_bot_avatar_downloaded(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
+	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
+		_show_toast("Avatar load failed (%d)" % response_code)
+		return
+	var image := Image.new()
+	if not _load_avatar_image(image, headers, body):
+		_show_toast("Image decode failed")
+		return
+	_bots_avatar_texture.texture = ImageTexture.create_from_image(image)
+
+
+# --- Player Avatar ---
+
+func _setup_player_avatar_section():
+	var content := $ScrollContainer/ContentVBox
+
+	var sep := HSeparator.new()
+	content.add_child(sep)
+
+	var heading := Label.new()
+	heading.text = "Player Avatar"
+	heading.add_theme_font_size_override("font_size", 20)
+	content.add_child(heading)
+
+	var btn := Button.new()
+	btn.text = "Get Player Avatar"
+	btn.pressed.connect(_on_get_player_avatar_pressed)
+	content.add_child(btn)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	content.add_child(row)
+
+	_player_avatar_texture = TextureRect.new()
+	_player_avatar_texture.custom_minimum_size = Vector2(128, 128)
+	_player_avatar_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_player_avatar_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(_player_avatar_texture)
+
+	_player_avatar_url_label = Label.new()
+	_player_avatar_url_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_player_avatar_url_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_player_avatar_url_label.add_theme_font_size_override("font_size", 11)
+	_player_avatar_url_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1))
+	row.add_child(_player_avatar_url_label)
+
+	_player_avatar_http_request = HTTPRequest.new()
+	add_child(_player_avatar_http_request)
+	_player_avatar_http_request.request_completed.connect(_on_player_avatar_downloaded)
+
+
+func _on_get_player_avatar_pressed():
+	if not JestSDK.player.is_registered:
+		_show_toast("Player is not registered")
+		return
+	var url := JestSDK.get_player_avatar(128)
+	if url.is_empty():
+		_show_toast("Player has no avatar")
+		return
+	_player_avatar_url_label.text = url
+	_player_avatar_http_request.cancel_request()
+	var err := _player_avatar_http_request.request(url, AVATAR_REQUEST_HEADERS)
+	if err != OK:
+		_show_toast("Avatar request failed: %d" % err)
+
+
+func _on_player_avatar_downloaded(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
+	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
+		_show_toast("Avatar load failed (%d)" % response_code)
+		return
+	var image := Image.new()
+	if not _load_avatar_image(image, headers, body):
+		_show_toast("Image decode failed")
+		return
+	_player_avatar_texture.texture = ImageTexture.create_from_image(image)
+
+
+func _load_avatar_image(image: Image, headers: PackedStringArray, body: PackedByteArray) -> bool:
+	var content_type := _avatar_content_type(headers)
+	if content_type == "webp":
+		return image.load_webp_from_buffer(body) == OK
+	if content_type == "png":
+		return image.load_png_from_buffer(body) == OK
+	if content_type == "jpg":
+		return image.load_jpg_from_buffer(body) == OK
+	if image.load_webp_from_buffer(body) == OK:
+		return true
+	if image.load_png_from_buffer(body) == OK:
+		return true
+	return image.load_jpg_from_buffer(body) == OK
+
+
+func _avatar_content_type(headers: PackedStringArray) -> String:
+	for header in headers:
+		var parts := header.split(":", false, 1)
+		if parts.size() != 2 or parts[0].strip_edges().to_lower() != "content-type":
+			continue
+		var content_type := parts[1].strip_edges().to_lower()
+		if content_type.contains("webp"):
+			return "webp"
+		if content_type.contains("png"):
+			return "png"
+		if content_type.contains("jpeg") or content_type.contains("jpg"):
+			return "jpg"
+	return ""
 
 
 # --- Loading ---
