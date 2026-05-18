@@ -95,6 +95,7 @@ func _init_sdk():
 	if not success:
 		_show_toast("SDK initialization failed")
 		return
+	print("[JestSDK] foo() = ", JestSDK.foo())
 	_refresh_player_state()
 	_show_toast("SDK initialized")
 
