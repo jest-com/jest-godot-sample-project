@@ -21,7 +21,7 @@ static func get_bot_avatar(username: String, size: int = 1000) -> String:
 
 
 ## Wraps a raw player avatar URL through the Cloudflare image proxy at the given
-## [param size]. Used by [JestSDKSingleton.get_player_avatar] to return a URL that
+## [param size]. Used by [JestSocial.get_player_avatar] to return a URL that
 ## avoids AVIF negotiation in Godot. Returns an empty string
 ## when [param avatar_url] is empty, and the URL unchanged when it points at
 ## localhost (Cloudflare can't fetch those in dev).

@@ -20,6 +20,9 @@ func get_products() -> Array[JestProduct]:
 
 ## Initiates an in-app purchase for the specified product SKU.
 ## Must be awaited: var result = await JestSDK.payment.begin_purchase("gems_100")
+## [br][b]Sandbox testing:[/b] sandbox users see real product prices in the game UI,
+## but the platform checkout modal makes clear that no charge will be made and the
+## resulting purchase records 0 credits.
 func begin_purchase(sku: String) -> JestPurchaseResult:
 	if sku.strip_edges().is_empty():
 		return JestPurchaseResult.make_error("invalid_sku")
