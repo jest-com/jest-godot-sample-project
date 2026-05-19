@@ -16,6 +16,8 @@ var player_data: String:
 
 ## Configure mock purchase behavior.
 var mock_purchase_succeeds: bool = true
+## Configure mock subscription behavior.
+var mock_subscription_succeeds: bool = true
 ## Configure mock products JSON.
 var mock_products_json: String = '[{"sku":"gems_100","name":"100 Gems","description":"Get 100 gems","price":99.0,"currency":"USD"},{"sku":"gems_500","name":"500 Gems","description":"Get 500 gems","price":499.0,"currency":"USD"}]'
 
@@ -82,6 +84,14 @@ func get_purchase_response() -> String:
 		return '{"result":"cancel"}'
 
 
+func get_subscription_response() -> String:
+	_log("begin_subscription")
+	if mock_subscription_succeeds:
+		return '{"result":"success","subscription":{"sku":"premium_monthly","name":"Premium Monthly","description":"Monthly premium subscription","isActive":true,"price":9.99,"currency":"USD","billingPeriod":"monthly"},"subscriptionSigned":"mock_jws"}'
+	else:
+		return '{"result":"cancel"}'
+
+
 func get_incomplete_purchase_response() -> String:
 	_log("get_incomplete_purchases")
 	return '{"hasMore":false,"purchasesSigned":"mock_jws","purchases":[]}'
@@ -112,3 +122,7 @@ func redirect_to_explore_page() -> void:
 func get_player_signed_response() -> String:
 	_log("get_player_signed")
 	return '{"player":{"playerId":"%s","registered":%s,"username":null,"avatarUrl":null},"playerSigned":"mock_signed_data"}' % [player_id, str(is_registered).to_lower()]
+
+
+func capture_event(event_name: String, properties_json: String) -> void:
+	_log("capture_event(%s): %s" % [event_name, properties_json])

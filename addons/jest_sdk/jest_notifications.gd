@@ -20,7 +20,8 @@ func schedule(options: JestNotificationOptions) -> void:
 	payload["body"] = options.body
 	payload["ctaText"] = options.cta_text
 	payload["priority"] = options.priority
-	payload["identifier"] = options.identifier
+	if not options.identifier.is_empty():
+		payload["identifier"] = options.identifier
 
 	if not options.title.is_empty():
 		payload["title"] = options.title

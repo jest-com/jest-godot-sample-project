@@ -302,6 +302,18 @@ func set_loading_progress(progress: float) -> void:
 	_sdk.setLoadingProgress(clamped)
 
 
+func capture_event(event_name: String, properties_json: String) -> void:
+	if not _is_web:
+		_mock.capture_event(event_name, properties_json)
+		return
+	if properties_json.is_empty():
+		_sdk.captureEvent(event_name)
+	else:
+		var props = _parse_json_to_js(properties_json)
+		if props != null:
+			_sdk.captureEvent(event_name, props)
+
+
 func send_reserved_login_message(reservation_json: String) -> void:
 	if not _is_web:
 		if _verbose:
@@ -375,6 +387,17 @@ func get_incomplete_purchases() -> Dictionary:
 	var cb_id := _generate_callback_id()
 	_setup_promise_callback(promise, cb_id, true)
 	return await _wait_for_callback(cb_id, TIMEOUT_DEFAULT)
+
+
+func begin_subscription(sku: String) -> Dictionary:
+	if not _is_web:
+		return {"result": _mock.get_subscription_response(), "error": "", "timed_out": false}
+	var opts = JavaScriptBridge.create_object("Object")
+	opts.subscriptionSku = sku
+	var promise = _sdk_payments.beginSubscription(opts)
+	var cb_id := _generate_callback_id()
+	_setup_promise_callback(promise, cb_id, true)
+	return await _wait_for_callback(cb_id, TIMEOUT_PURCHASE)
 
 
 func open_referral_dialog(options_json: String) -> Dictionary:
