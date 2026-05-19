@@ -34,7 +34,6 @@ func validate() -> String:
 	if title.length() > TITLE_CHAR_LIMIT: return "title must be %d characters or fewer" % TITLE_CHAR_LIMIT
 	if cta_text.is_empty(): return "cta_text is required"
 	if cta_text.length() > CTA_CHAR_LIMIT: return "cta_text must be %d characters or fewer" % CTA_CHAR_LIMIT
-	if identifier.is_empty(): return "identifier is required"
 	var has_date := not date.is_empty()
 	var has_days := scheduled_in_days > 0
 	if not has_date and not has_days: return "Either date or scheduled_in_days must be provided"

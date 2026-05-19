@@ -11,6 +11,10 @@ extends Resource
 @export var share_text: String = ""
 ## Custom onboarding flow slug.
 @export var onboarding_slug: String = ""
+## Optional notification templates used to alert the referrer when invited players convert.
+## Each entry is a Dictionary with "minConversionCount" (int) and "variants" (Array of
+## Dictionaries with "body", "ctaText", and optional "title" and "imageReference").
+@export var notification_templates: Array = []
 
 
 ## Validates this options object. Returns empty string if valid, error message otherwise.

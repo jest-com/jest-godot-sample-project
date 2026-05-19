@@ -20,6 +20,9 @@ func get_products() -> Array[JestProduct]:
 
 ## Initiates an in-app purchase for the specified product SKU.
 ## Must be awaited: var result = await JestSDK.payment.begin_purchase("gems_100")
+## [br][b]Sandbox testing:[/b] sandbox users see real product prices in the game UI,
+## but the platform checkout modal makes clear that no charge will be made and the
+## resulting purchase records 0 credits.
 func begin_purchase(sku: String) -> JestPurchaseResult:
 	if sku.strip_edges().is_empty():
 		return JestPurchaseResult.make_error("invalid_sku")
@@ -51,6 +54,25 @@ func complete_purchase(purchase_token: String) -> JestResult:
 	if d.get("result", "") == "error":
 		return JestResult.failure(str(d.get("error", "unknown")))
 	return JestResult.success()
+
+
+## Initiates a subscription checkout for the specified subscription SKU.
+## Must be awaited: var result = await JestSDK.payment.begin_subscription("premium_monthly")
+func begin_subscription(sku: String) -> JestSubscriptionResult:
+	if sku.strip_edges().is_empty():
+		return JestSubscriptionResult.make_error("invalid_sku")
+	var cb_result: Dictionary = await _bridge.begin_subscription(sku)
+	if cb_result["timed_out"]:
+		return JestSubscriptionResult.make_error("timeout")
+	if not cb_result["error"].is_empty():
+		return JestSubscriptionResult.make_error(cb_result["error"])
+	var json_str: String = cb_result["result"]
+	if json_str.is_empty():
+		return JestSubscriptionResult.make_error("empty_response")
+	var d := JestUtils.parse_json_dict(json_str)
+	if d.is_empty():
+		return JestSubscriptionResult.make_error("parse_error")
+	return JestSubscriptionResult.from_dict(d)
 
 
 ## Retrieves incomplete purchases that have not yet been completed.
