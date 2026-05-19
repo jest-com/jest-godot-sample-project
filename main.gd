@@ -71,6 +71,7 @@ var _bots_http_request: HTTPRequest
 var _player_avatar_texture: TextureRect
 var _player_avatar_url_label: Label
 var _player_avatar_http_request: HTTPRequest
+var _subscription_sku_input: LineEdit
 
 
 # Keeps Cloudflare's resized avatar response on a WebP CORS-enabled variant.
@@ -85,6 +86,7 @@ func _ready():
 	_setup_dropdowns()
 	_setup_bots_section()
 	_setup_player_avatar_section()
+	_setup_subscription_section()
 	_init_sdk()
 
 
@@ -663,6 +665,52 @@ func _avatar_content_type(headers: PackedStringArray) -> String:
 		if content_type.contains("jpeg") or content_type.contains("jpg"):
 			return "jpg"
 	return ""
+
+
+# --- Subscriptions ---
+
+func _setup_subscription_section():
+	var content := $ScrollContainer/ContentVBox
+
+	var sep := HSeparator.new()
+	content.add_child(sep)
+
+	var heading := Label.new()
+	heading.text = "Subscriptions"
+	heading.add_theme_font_size_override("font_size", 20)
+	content.add_child(heading)
+
+	var caption := Label.new()
+	caption.text = "Subscription SKU"
+	caption.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1))
+	caption.add_theme_font_size_override("font_size", 12)
+	content.add_child(caption)
+
+	_subscription_sku_input = LineEdit.new()
+	_subscription_sku_input.placeholder_text = "e.g. \"premium_monthly\""
+	_subscription_sku_input.text = "premium_monthly"
+	content.add_child(_subscription_sku_input)
+
+	var btn := Button.new()
+	btn.text = "Begin Subscription"
+	btn.pressed.connect(_on_begin_subscription_pressed)
+	content.add_child(btn)
+
+
+func _on_begin_subscription_pressed():
+	var sku := _subscription_sku_input.text.strip_edges()
+	if sku.is_empty():
+		_show_toast("SKU is required")
+		return
+	_show_loading()
+	var result := await JestSDK.payment.begin_subscription(sku)
+	_hide_loading()
+	if result.status == JestSubscriptionResult.Status.SUCCESS:
+		_show_toast("Subscribed: %s (%s)" % [result.subscription.name, result.subscription.billing_period])
+	elif result.status == JestSubscriptionResult.Status.CANCELED:
+		_show_toast("Subscription canceled")
+	else:
+		_show_toast("Subscription error: %s" % result.error)
 
 
 # --- Loading ---
