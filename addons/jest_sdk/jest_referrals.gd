@@ -26,6 +26,8 @@ func open_referral_dialog(options: JestReferralOptions) -> JestShareResult:
 		json_obj["shareText"] = options.share_text
 	if not options.onboarding_slug.is_empty():
 		json_obj["onboardingSlug"] = options.onboarding_slug
+	if not options.notification_templates.is_empty():
+		json_obj["notificationTemplates"] = options.notification_templates
 
 	var cb_result: Dictionary = await _bridge.open_referral_dialog(JSON.stringify(json_obj))
 	if cb_result.get("timed_out", false):

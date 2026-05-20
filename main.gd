@@ -458,6 +458,16 @@ func _on_open_dialog_pressed():
 	if slug != "":
 		opts.onboarding_slug = slug
 
+	# Demonstrate notificationTemplates: notify the referrer after their first conversion.
+	opts.notification_templates = [
+		{
+			"minConversionCount": 1,
+			"variants": [
+				{"body": "Someone you invited just joined!", "ctaText": "Check it out"},
+			],
+		},
+	]
+
 	var err := opts.validate()
 	if not err.is_empty():
 		_show_toast(err)
