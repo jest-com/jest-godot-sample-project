@@ -16,6 +16,8 @@ var player_data: String:
 
 ## Configure mock purchase behavior.
 var mock_purchase_succeeds: bool = true
+## Configure mock subscription behavior.
+var mock_subscription_succeeds: bool = true
 ## Configure mock products JSON.
 var mock_products_json: String = '[{"sku":"gems_100","name":"100 Gems","description":"Get 100 gems","price":99.0,"currency":"USD"},{"sku":"gems_500","name":"500 Gems","description":"Get 500 gems","price":499.0,"currency":"USD"}]'
 
@@ -78,6 +80,14 @@ func get_purchase_response() -> String:
 	_log("begin_purchase")
 	if mock_purchase_succeeds:
 		return '{"result":"success","purchase":{"purchaseToken":"mock_token","productSku":"gems_100","credits":99,"createdAt":1761729039,"completedAt":null,"estimatedRevenue":69.30,"price":99.0,"currency":"USD"},"purchaseSigned":"mock_jws"}'
+	else:
+		return '{"result":"cancel"}'
+
+
+func get_subscription_response() -> String:
+	_log("begin_subscription")
+	if mock_subscription_succeeds:
+		return '{"result":"success","subscription":{"sku":"premium_monthly","name":"Premium Monthly","description":"Monthly premium subscription","isActive":true,"price":9.99,"currency":"USD","billingPeriod":"monthly"},"subscriptionSigned":"mock_jws"}'
 	else:
 		return '{"result":"cancel"}'
 

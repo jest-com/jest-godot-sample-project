@@ -377,6 +377,17 @@ func get_incomplete_purchases() -> Dictionary:
 	return await _wait_for_callback(cb_id, TIMEOUT_DEFAULT)
 
 
+func begin_subscription(sku: String) -> Dictionary:
+	if not _is_web:
+		return {"result": _mock.get_subscription_response(), "error": "", "timed_out": false}
+	var opts = JavaScriptBridge.create_object("Object")
+	opts.subscriptionSku = sku
+	var promise = _sdk_payments.beginSubscription(opts)
+	var cb_id := _generate_callback_id()
+	_setup_promise_callback(promise, cb_id, true)
+	return await _wait_for_callback(cb_id, TIMEOUT_PURCHASE)
+
+
 func open_referral_dialog(options_json: String) -> Dictionary:
 	if not _is_web:
 		_mock.open_referral_dialog(options_json)
