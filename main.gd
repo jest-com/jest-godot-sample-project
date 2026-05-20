@@ -582,6 +582,11 @@ func _setup_player_avatar_section():
 	heading.add_theme_font_size_override("font_size", 20)
 	content.add_child(heading)
 
+	var profile_btn := Button.new()
+	profile_btn.text = "Get Profile (social)"
+	profile_btn.pressed.connect(_on_get_profile_pressed)
+	content.add_child(profile_btn)
+
 	var btn := Button.new()
 	btn.text = "Get Player Avatar"
 	btn.pressed.connect(_on_get_player_avatar_pressed)
@@ -607,6 +612,16 @@ func _setup_player_avatar_section():
 	_player_avatar_http_request = HTTPRequest.new()
 	add_child(_player_avatar_http_request)
 	_player_avatar_http_request.request_completed.connect(_on_player_avatar_downloaded)
+
+
+func _on_get_profile_pressed():
+	var profile := JestSDK.social.get_profile(128)
+	var username: String = profile.get("username", "")
+	var avatar_url: String = profile.get("avatar_url", "")
+	_show_toast("Profile: %s | avatar: %s" % [
+		username if not username.is_empty() else "(none)",
+		avatar_url if not avatar_url.is_empty() else "(none)",
+	])
 
 
 func _on_get_player_avatar_pressed():
