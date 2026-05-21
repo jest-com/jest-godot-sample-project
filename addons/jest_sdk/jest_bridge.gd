@@ -302,6 +302,18 @@ func set_loading_progress(progress: float) -> void:
 	_sdk.setLoadingProgress(clamped)
 
 
+func capture_event(event_name: String, properties_json: String) -> void:
+	if not _is_web:
+		_mock.capture_event(event_name, properties_json)
+		return
+	if properties_json.is_empty():
+		_sdk.captureEvent(event_name)
+	else:
+		var props = _parse_json_to_js(properties_json)
+		if props != null:
+			_sdk.captureEvent(event_name, props)
+
+
 func send_reserved_login_message(reservation_json: String) -> void:
 	if not _is_web:
 		if _verbose:
@@ -383,6 +395,26 @@ func begin_subscription(sku: String) -> Dictionary:
 	var opts = JavaScriptBridge.create_object("Object")
 	opts.subscriptionSku = sku
 	var promise = _sdk_payments.beginSubscription(opts)
+	var cb_id := _generate_callback_id()
+	_setup_promise_callback(promise, cb_id, true)
+	return await _wait_for_callback(cb_id, TIMEOUT_PURCHASE)
+
+
+func get_subscriptions() -> Dictionary:
+	if not _is_web:
+		return {"result": _mock.get_subscriptions_response(), "error": "", "timed_out": false}
+	var promise = _sdk_payments.getSubscriptions()
+	var cb_id := _generate_callback_id()
+	_setup_promise_callback(promise, cb_id, true)
+	return await _wait_for_callback(cb_id, TIMEOUT_DEFAULT)
+
+
+func cancel_subscription(sku: String) -> Dictionary:
+	if not _is_web:
+		return {"result": _mock.get_cancel_subscription_response(), "error": "", "timed_out": false}
+	var opts = JavaScriptBridge.create_object("Object")
+	opts.subscriptionSku = sku
+	var promise = _sdk_payments.cancelSubscription(opts)
 	var cb_id := _generate_callback_id()
 	_setup_promise_callback(promise, cb_id, true)
 	return await _wait_for_callback(cb_id, TIMEOUT_PURCHASE)

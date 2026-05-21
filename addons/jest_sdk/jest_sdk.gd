@@ -155,11 +155,31 @@ func validate_name(name_value: String) -> JestNameValidationResult:
 	return JestNameValidationResult.from_dict(JestUtils.parse_json_dict(cb_result["result"]))
 
 
+## Records a custom analytics event for the current player.
+## Events appear in the Developer Console for tracking milestones, funnels, and feature usage.
+## event_name: stable, lowercase, snake_case name (e.g. "level_complete").
+## properties: optional structured data attached to the event.
+func capture_event(event_name: String, properties: Dictionary = {}) -> void:
+	if event_name.strip_edges().is_empty():
+		push_error("[JestSDK] event_name cannot be empty")
+		return
+	var props_json := JSON.stringify(properties) if not properties.is_empty() else ""
+	_bridge.capture_event(event_name, props_json)
+
+
 ## Reports loading progress to the platform loading screen overlay.
 ## Only works when the game's loading screen mode is set to "manual".
 ## progress: Loading progress from 0 to 100. Setting to 100 dismisses the overlay.
 func set_loading_progress(progress: float) -> void:
 	_bridge.set_loading_progress(progress)
+
+
+## Returns the current player's profile (username and sized avatar URL).
+## Mirrors the HTML5 SDK's [code]social.getProfile({ avatarSize })[/code].
+## Supported sizes: 64, 128, 256, 512, 1000 (default). Other values are
+## bucketed down to the next supported size.
+func get_profile(avatar_size: int = 1000) -> JestPlayerProfile:
+	return social.get_profile(avatar_size)
 
 
 ## Returns a CDN URL for a bot avatar, deterministically seeded by [param username].
@@ -169,11 +189,11 @@ func get_bot_avatar(username: String, size: int = 1000) -> String:
 	return social.get_bot_avatar(username, size)
 
 
+## [b]Deprecated.[/b] Use [code]get_profile(size).avatar_url[/code] instead.
 ## Returns a CDN URL for the current player's avatar at the requested [param size],
 ## routed through Cloudflare Image Resizing so Godot can decode it reliably.
 ## Returns an empty string when the player has no avatar.
 ## Supported sizes: 64, 128, 256, 512, 1000 (default). Intermediate values bucket
-## down to the next supported size. Mirrors the HTML5 SDK's
-## [code]social.getProfile({ avatarSize })[/code].
+## down to the next supported size.
 func get_player_avatar(size: int = 1000) -> String:
 	return social.get_player_avatar(size)

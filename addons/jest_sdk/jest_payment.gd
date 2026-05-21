@@ -75,6 +75,40 @@ func begin_subscription(sku: String) -> JestSubscriptionResult:
 	return JestSubscriptionResult.from_dict(d)
 
 
+## Retrieves subscription offers and the player's current entitlement on each.
+## Must be awaited: var result = await JestSDK.payment.get_subscriptions()
+## [br]For guest players, result.subscriptions is empty.
+## [br]Verify result.signed server-side for any entitlement grant.
+func get_subscriptions() -> JestSubscriptionsResult:
+	var cb_result: Dictionary = await _bridge.get_subscriptions()
+	if cb_result["timed_out"]:
+		return JestSubscriptionsResult.make_error("timeout")
+	if not cb_result["error"].is_empty():
+		return JestSubscriptionsResult.make_error(cb_result["error"])
+	var d := JestUtils.parse_json_dict(cb_result["result"])
+	return JestSubscriptionsResult.from_dict(d)
+
+
+## Opens a cancellation confirmation dialog for the specified subscription.
+## Must be awaited: var result = await JestSDK.payment.cancel_subscription("premium_monthly")
+## [br]If the user confirms, the subscription is cancelled at the end of the current billing period.
+func cancel_subscription(sku: String) -> JestCancelSubscriptionResult:
+	if sku.strip_edges().is_empty():
+		return JestCancelSubscriptionResult.make_error("invalid_sku")
+	var cb_result: Dictionary = await _bridge.cancel_subscription(sku)
+	if cb_result["timed_out"]:
+		return JestCancelSubscriptionResult.make_error("timeout")
+	if not cb_result["error"].is_empty():
+		return JestCancelSubscriptionResult.make_error(cb_result["error"])
+	var json_str: String = cb_result["result"]
+	if json_str.is_empty():
+		return JestCancelSubscriptionResult.make_error("empty_response")
+	var d := JestUtils.parse_json_dict(json_str)
+	if d.is_empty():
+		return JestCancelSubscriptionResult.make_error("parse_error")
+	return JestCancelSubscriptionResult.from_dict(d)
+
+
 ## Retrieves incomplete purchases that have not yet been completed.
 ## Must be awaited: var result = await JestSDK.payment.get_incomplete_purchases()
 func get_incomplete_purchases() -> JestIncompletePurchasesResult:

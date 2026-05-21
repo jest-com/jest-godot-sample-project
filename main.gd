@@ -628,8 +628,8 @@ func _setup_player_avatar_section():
 
 func _on_get_profile_pressed():
 	var profile := JestSDK.social.get_profile(128)
-	var username: String = profile.get("username", "")
-	var avatar_url: String = profile.get("avatar_url", "")
+	var username: String = profile.username
+	var avatar_url: String = profile.avatar_url
 	_show_toast("Profile: %s | avatar: %s" % [
 		username if not username.is_empty() else "(none)",
 		avatar_url if not avatar_url.is_empty() else "(none)",
@@ -721,6 +721,16 @@ func _setup_subscription_section():
 	btn.pressed.connect(_on_begin_subscription_pressed)
 	content.add_child(btn)
 
+	var get_subs_btn := Button.new()
+	get_subs_btn.text = "Get Subscriptions"
+	get_subs_btn.pressed.connect(_on_get_subscriptions_pressed)
+	content.add_child(get_subs_btn)
+
+	var cancel_btn := Button.new()
+	cancel_btn.text = "Cancel Subscription"
+	cancel_btn.pressed.connect(_on_cancel_subscription_pressed)
+	content.add_child(cancel_btn)
+
 
 func _on_begin_subscription_pressed():
 	var sku := _subscription_sku_input.text.strip_edges()
@@ -731,11 +741,43 @@ func _on_begin_subscription_pressed():
 	var result := await JestSDK.payment.begin_subscription(sku)
 	_hide_loading()
 	if result.status == JestSubscriptionResult.Status.SUCCESS:
-		_show_toast("Subscribed: %s (%s)" % [result.subscription.name, result.subscription.billing_period])
+		_show_toast("Subscribed: %s (%s)" % [result.subscription.display_name, result.subscription.billing_period])
 	elif result.status == JestSubscriptionResult.Status.CANCELED:
 		_show_toast("Subscription canceled")
 	else:
 		_show_toast("Subscription error: %s" % result.error)
+
+
+func _on_get_subscriptions_pressed():
+	_show_loading()
+	var result := await JestSDK.payment.get_subscriptions()
+	_hide_loading()
+	if not result.ok:
+		_show_toast("Error: %s" % result.error)
+		return
+	if result.subscriptions.is_empty():
+		_show_toast("No subscriptions found")
+	else:
+		var names: PackedStringArray = []
+		for sub in result.subscriptions:
+			names.append("%s (%s)" % [sub.display_name, sub.status])
+		_show_toast("Subscriptions: %s" % ", ".join(names))
+
+
+func _on_cancel_subscription_pressed():
+	var sku := _subscription_sku_input.text.strip_edges()
+	if sku.is_empty():
+		_show_toast("SKU is required")
+		return
+	_show_loading()
+	var result := await JestSDK.payment.cancel_subscription(sku)
+	_hide_loading()
+	if result.status == JestCancelSubscriptionResult.Status.SUCCESS:
+		_show_toast("Subscription cancelled: %s" % sku)
+	elif result.status == JestCancelSubscriptionResult.Status.CANCELED:
+		_show_toast("Cancellation dismissed")
+	else:
+		_show_toast("Cancel error: %s" % result.error)
 
 
 # --- Loading ---
