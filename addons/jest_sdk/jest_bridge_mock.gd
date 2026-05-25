@@ -87,7 +87,7 @@ func get_purchase_response() -> String:
 func get_subscription_response() -> String:
 	_log("begin_subscription")
 	if mock_subscription_succeeds:
-		return '{"result":"success","subscription":{"sku":"premium_monthly","name":"Premium Monthly","description":"Monthly premium subscription","isActive":true,"price":9.99,"currency":"USD","billingPeriod":"monthly"},"subscriptionSigned":"mock_jws"}'
+		return '{"result":"success","subscription":{"sku":"premium_monthly","name":"Premium Monthly","description":"Monthly premium subscription","isActive":true,"price":9.99,"currency":"USD","billingPeriod":"monthly","estimatedRevenue":6.69},"subscriptionSigned":"mock_jws"}'
 	else:
 		return '{"result":"cancel"}'
 
