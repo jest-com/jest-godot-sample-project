@@ -122,3 +122,7 @@ func redirect_to_explore_page() -> void:
 func get_player_signed_response() -> String:
 	_log("get_player_signed")
 	return '{"player":{"playerId":"%s","registered":%s,"username":null,"avatarUrl":null},"playerSigned":"mock_signed_data"}' % [player_id, str(is_registered).to_lower()]
+
+
+func mark_game_loaded() -> void:
+	_log("mark_game_loaded")

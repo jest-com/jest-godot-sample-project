@@ -98,6 +98,7 @@ func _init_sdk():
 		_show_toast("SDK initialization failed")
 		return
 	_refresh_player_state()
+	JestSDK.mark_game_loaded()
 	_show_toast("SDK initialized")
 
 
