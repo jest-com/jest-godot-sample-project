@@ -3,9 +3,13 @@ extends RefCounted
 
 var _bridge: JestBridge
 
+## Experimental, unstable notification APIs.
+var experimental: JestExperimentalNotifications
+
 
 func _init(bridge: JestBridge) -> void:
 	_bridge = bridge
+	experimental = JestExperimentalNotifications.new(bridge)
 
 
 ## Schedules a notification using a JestNotificationOptions resource.

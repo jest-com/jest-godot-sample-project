@@ -71,6 +71,10 @@ func unschedule_notification_v2(key: String) -> void:
 	_log("unschedule_notification(%s)" % key)
 
 
+func schedule_interactive_notification(options: String) -> void:
+	_log("schedule_interactive_notification: %s" % options)
+
+
 func get_products() -> String:
 	_log("get_products")
 	return mock_products_json
