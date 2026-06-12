@@ -14,7 +14,6 @@ env:
   GODOT_TEMPLATES_DIR: 4.6.stable
   EXPORT_PRESET: GodotDemo
   ZIP_NAME: jest-godot-sample-project
-  ZIP_INNER_DIR: jest-godot-sample-project
 
 jobs:
   build:
@@ -63,12 +62,12 @@ jobs:
             test -s "build/web/$f" || { echo "Missing or empty: build/web/$f"; exit 1; }
           done
 
-      - name: Stage and zip export output
+      - name: Zip export output
         run: |
           set -euxo pipefail
-          mkdir -p "staging/${ZIP_INNER_DIR}"
-          cp -r build/web/. "staging/${ZIP_INNER_DIR}/"
-          (cd staging && zip -r "../${ZIP_NAME}.zip" "${ZIP_INNER_DIR}")
+          # Zip the export contents directly so index.html sits at the archive
+          # root; the upload API rejects builds wrapped in a top-level folder.
+          (cd build/web && zip -r "${GITHUB_WORKSPACE}/${ZIP_NAME}.zip" .)
 
       - name: Upload as workflow artifact (manual runs)
         if: github.event_name == 'workflow_dispatch'
