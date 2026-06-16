@@ -160,7 +160,7 @@ func _on_login_pressed():
 		else:
 			_show_toast("Payload must be a JSON object")
 			return
-	JestSDK.login(payload)
+	await JestSDK.login(payload)
 	_show_toast("Login called")
 	_refresh_player_state()
 
