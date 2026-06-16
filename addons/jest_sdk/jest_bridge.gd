@@ -25,6 +25,9 @@ var _next_callback_id: int = 0
 # Live JS registration-overlay handles keyed by conversationId.
 var _overlay_handles: Dictionary = {}
 
+var _loading_complete: bool = false
+var _game_loaded_sent: bool = false
+
 # Cached references to JS objects
 var _sdk: JavaScriptObject         # window.JestSDK
 var _sdk_data: JavaScriptObject    # window.JestSDK.data
@@ -295,11 +298,27 @@ func unschedule_notification_v2(identifier: String) -> void:
 
 func set_loading_progress(progress: float) -> void:
 	var clamped := int(clampf(roundf(progress), 0.0, 100.0))
+	if clamped == 100:
+		_loading_complete = true
 	if not _is_web:
 		if _verbose:
 			print("[JestSDK] SetLoadingProgress: %d%%" % clamped)
 		return
 	_sdk.setLoadingProgress(clamped)
+
+
+func mark_game_loaded() -> void:
+	if _game_loaded_sent:
+		return
+	_game_loaded_sent = true
+	if not _is_web:
+		if not _loading_complete:
+			_loading_complete = true
+			if _verbose:
+				print("[JestSDK] SetLoadingProgress: 100%")
+		_mock.mark_game_loaded()
+		return
+	_sdk.markGameLoaded()
 
 
 func send_reserved_login_message(reservation_json: String) -> void:
