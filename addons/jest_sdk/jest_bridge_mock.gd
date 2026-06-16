@@ -103,7 +103,14 @@ func get_purchase_complete_response() -> String:
 
 
 func open_referral_dialog(options_json: String) -> void:
-	_log("open_referral_dialog: %s" % options_json)
+	var parsed = JSON.parse_string(options_json)
+	var share_image_bytes := 0
+	if parsed is Dictionary:
+		share_image_bytes = (parsed.get("shareImage", "") as String).length()
+	_log("open_referral_dialog reference=%s shareImageBytes=%d" % [
+		(parsed.get("reference", "") if parsed is Dictionary else ""),
+		share_image_bytes,
+	])
 
 
 func get_list_referrals_response() -> String:
