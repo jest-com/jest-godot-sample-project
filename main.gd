@@ -87,6 +87,7 @@ func _ready():
 	_setup_bots_section()
 	_setup_player_avatar_section()
 	_setup_subscription_section()
+	_setup_interactive_notifications_section()
 	_init_sdk()
 
 
@@ -736,6 +737,45 @@ func _on_begin_subscription_pressed():
 		_show_toast("Subscription canceled")
 	else:
 		_show_toast("Subscription error: %s" % result.error)
+
+
+# --- Interactive Notifications (Experimental) ---
+
+func _setup_interactive_notifications_section():
+	var content := $ScrollContainer/ContentVBox
+
+	var sep := HSeparator.new()
+	content.add_child(sep)
+
+	var heading := Label.new()
+	heading.text = "Interactive Notifications (Experimental)"
+	heading.add_theme_font_size_override("font_size", 20)
+	content.add_child(heading)
+
+	var btn := Button.new()
+	btn.text = "Schedule Interactive Notification"
+	btn.pressed.connect(_on_schedule_interactive_pressed)
+	content.add_child(btn)
+
+
+func _on_schedule_interactive_pressed():
+	var opts := JestInteractiveNotificationOptions.new()
+	opts.identifier = "sample_interactive"
+	opts.scheduled_in_days = 1
+	opts.messages = [
+		{
+			"key": "q1",
+			"body": "Is it Synthetic or Natural?",
+			"options": [
+				{"key": "synthetic", "label": "Synthetic"},
+				{"key": "natural", "label": "Natural"},
+				{"key": "done", "label": "Play in browser"},
+			],
+		},
+		{"key": "done", "body": "Keep guessing in the browser", "ctaText": "Play"},
+	]
+	JestSDK.notifications.experimental.schedule_interactive(opts)
+	_show_toast("Interactive notification scheduled")
 
 
 # --- Loading ---

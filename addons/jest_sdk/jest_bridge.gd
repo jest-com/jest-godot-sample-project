@@ -293,6 +293,18 @@ func unschedule_notification_v2(identifier: String) -> void:
 	_sdk_notifications.unscheduleNotification(opts)
 
 
+func schedule_interactive_notification(options_json: String) -> void:
+	if not _is_web:
+		_mock.schedule_interactive_notification(options_json)
+		return
+	var opts = _parse_json_to_js(options_json)
+	if opts == null:
+		return
+	if opts.scheduledAt:
+		opts.scheduledAt = JavaScriptBridge.create_object("Date", opts.scheduledAt)
+	_sdk_notifications.experimental.scheduleInteractiveNotification(opts)
+
+
 func set_loading_progress(progress: float) -> void:
 	var clamped := int(clampf(roundf(progress), 0.0, 100.0))
 	if not _is_web:
