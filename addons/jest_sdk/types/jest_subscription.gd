@@ -15,6 +15,8 @@ var price: float = 0.0
 var currency: String = ""
 ## Billing period: "monthly", "yearly", or "weekly".
 var billing_period: String = ""
+## Approximate revenue in USD for the game publisher per billing period.
+var estimated_revenue: float = 0.0
 
 
 static func from_dict(d: Dictionary) -> JestSubscription:
@@ -27,4 +29,5 @@ static func from_dict(d: Dictionary) -> JestSubscription:
 	s.price = float(d.get("price", 0.0))
 	s.currency = str(d.get("currency", ""))
 	s.billing_period = str(d.get("billingPeriod", ""))
+	s.estimated_revenue = float(d.get("estimatedRevenue", 0.0))
 	return s
