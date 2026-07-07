@@ -66,7 +66,7 @@ func _ready() -> void:
 ## Returns true on success, false on failure.
 ## options Dictionary keys:
 ##   auto_login_reminders: bool (optional, default true) — when false, disables
-##     automatic login reminder popups for unregistered users.
+##     automatic login reminder popups for guest users.
 ##     Manual login via login() is unaffected.
 ## Must be awaited: var success = await JestSDK.init_sdk()
 func init_sdk(options: Dictionary = {}) -> bool:
