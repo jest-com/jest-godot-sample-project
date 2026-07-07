@@ -32,6 +32,7 @@ var _sdk_payments: JavaScriptObject
 var _sdk_notifications: JavaScriptObject
 var _sdk_referrals: JavaScriptObject
 var _sdk_internal: JavaScriptObject
+var _sdk_social: JavaScriptObject
 var _json: JavaScriptObject        # window.JSON
 var _data_helper: JavaScriptObject # Wrapper to avoid set/get name collision with Object
 
@@ -97,6 +98,7 @@ func init_sdk(options: Dictionary = {}) -> bool:
 	_sdk_notifications = _sdk.notifications
 	_sdk_referrals = _sdk.referrals
 	_sdk_internal = _sdk.internal
+	_sdk_social = _sdk.social
 
 	# Get the data helper bridge injected by the export plugin.
 	# Direct calls like _sdk_data.set(k,v) invoke GDScript's Object.set() instead of JS data.set().
@@ -323,6 +325,25 @@ func capture_onboarding_event(event: String, properties_json: String) -> void:
 		var props = _parse_json_to_js(properties_json)
 		if props != null:
 			_sdk_internal.captureOnboardingEvent(event, props)
+
+
+## Registers [param provider] as the JS SDK's screenshot source, replacing
+## automatic canvas capture. An invalid Callable unregisters it. [param provider]
+## is called with no arguments and must return a base64 PNG String (raw or data
+## URL), or an empty string when no screenshot is available right now.
+func set_screenshot_provider(provider: Callable) -> void:
+	if not _is_web:
+		_mock.set_screenshot_provider(provider)
+		return
+	if not provider.is_valid():
+		_active_callbacks.erase("screenshot_provider")
+		_sdk_social.setScreenshotProvider(null)
+		return
+	var js_callback = JavaScriptBridge.create_callback(func(_args: Array):
+		return provider.call()
+	)
+	_active_callbacks["screenshot_provider"] = [js_callback]
+	_sdk_social.setScreenshotProvider(js_callback)
 
 
 # --- Async bridge methods ---

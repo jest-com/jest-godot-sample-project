@@ -71,6 +71,7 @@ var _bots_http_request: HTTPRequest
 var _player_avatar_texture: TextureRect
 var _player_avatar_url_label: Label
 var _player_avatar_http_request: HTTPRequest
+var _screenshot_provider_registered: bool = false
 var _subscription_sku_input: LineEdit
 
 
@@ -604,6 +605,11 @@ func _setup_player_avatar_section():
 	btn.pressed.connect(_on_get_player_avatar_pressed)
 	content.add_child(btn)
 
+	var screenshot_btn := Button.new()
+	screenshot_btn.text = "Toggle Custom Screenshot Provider"
+	screenshot_btn.pressed.connect(_on_toggle_screenshot_provider_pressed)
+	content.add_child(screenshot_btn)
+
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	content.add_child(row)
@@ -690,6 +696,26 @@ func _avatar_content_type(headers: PackedStringArray) -> String:
 		if content_type.contains("jpeg") or content_type.contains("jpg"):
 			return "jpg"
 	return ""
+
+
+func _on_toggle_screenshot_provider_pressed():
+	_screenshot_provider_registered = not _screenshot_provider_registered
+	if _screenshot_provider_registered:
+		JestSDK.social.set_screenshot_provider(_provide_screenshot)
+		_show_toast("Custom screenshot provider registered")
+	else:
+		JestSDK.social.set_screenshot_provider(Callable())
+		_show_toast("Custom screenshot provider unregistered")
+
+
+func _provide_screenshot() -> String:
+	var image := get_viewport().get_texture().get_image()
+	if image == null:
+		return ""
+	var png_bytes := image.save_png_to_buffer()
+	if png_bytes.is_empty():
+		return ""
+	return "data:image/png;base64," + Marshalls.raw_to_base64(png_bytes)
 
 
 # --- Subscriptions ---

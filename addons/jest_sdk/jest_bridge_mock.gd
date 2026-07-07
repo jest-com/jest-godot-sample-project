@@ -25,6 +25,9 @@ var _player_values: Dictionary = {}
 var _notifications: Array[Dictionary] = []
 var _entry_payload: String = "{}"
 
+## Last screenshot provider registered via set_screenshot_provider, for test inspection.
+var screenshot_provider: Callable
+
 
 func _log(message: String) -> void:
 	if verbose:
@@ -122,3 +125,8 @@ func redirect_to_explore_page() -> void:
 func get_player_signed_response() -> String:
 	_log("get_player_signed")
 	return '{"player":{"playerId":"%s","registered":%s,"username":null,"avatarUrl":null},"playerSigned":"mock_signed_data"}' % [player_id, str(is_registered).to_lower()]
+
+
+func set_screenshot_provider(provider: Callable) -> void:
+	_log("set_screenshot_provider(%s)" % ("valid" if provider.is_valid() else "null"))
+	screenshot_provider = provider

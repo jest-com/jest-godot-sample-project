@@ -54,7 +54,7 @@ func _ready() -> void:
 		player_data_changed.emit(k, v)
 	)
 	payment = JestPayment.new(_bridge)
-	social = JestSocial.new(player)
+	social = JestSocial.new(player, _bridge)
 	notifications = JestNotifications.new(_bridge)
 	referrals = JestReferrals.new(_bridge)
 	navigation = JestNavigation.new(_bridge)
