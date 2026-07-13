@@ -99,6 +99,8 @@ func _init_sdk():
 		return
 	_refresh_player_state()
 	_show_toast("SDK initialized")
+	# Demo: call once your game's first meaningful milestone (e.g. FTUE/Level 1) is reached.
+	JestSDK.mark_first_milestone()
 
 
 func _setup_dropdowns():

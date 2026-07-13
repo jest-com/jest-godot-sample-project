@@ -25,6 +25,8 @@ var _next_callback_id: int = 0
 # Live JS registration-overlay handles keyed by conversationId.
 var _overlay_handles: Dictionary = {}
 
+var _first_milestone_sent: bool = false
+
 # Cached references to JS objects
 var _sdk: JavaScriptObject         # window.JestSDK
 var _sdk_data: JavaScriptObject    # window.JestSDK.data
@@ -300,6 +302,16 @@ func set_loading_progress(progress: float) -> void:
 			print("[JestSDK] SetLoadingProgress: %d%%" % clamped)
 		return
 	_sdk.setLoadingProgress(clamped)
+
+
+func mark_first_milestone() -> void:
+	if _first_milestone_sent:
+		return
+	_first_milestone_sent = true
+	if not _is_web:
+		_mock.mark_first_milestone()
+		return
+	_sdk.markFirstMilestone()
 
 
 func send_reserved_login_message(reservation_json: String) -> void:
