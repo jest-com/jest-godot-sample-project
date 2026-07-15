@@ -119,6 +119,11 @@ func redirect_to_explore_page() -> void:
 	_log("redirect_to_explore_page")
 
 
+func get_redirect_to_team_game_response(options_json: String) -> String:
+	_log("redirect_to_team_game: %s" % options_json)
+	return '{"result":"success"}'
+
+
 func get_player_signed_response() -> String:
 	_log("get_player_signed")
 	return '{"player":{"playerId":"%s","registered":%s,"username":null,"avatarUrl":null},"playerSigned":"mock_signed_data"}' % [player_id, str(is_registered).to_lower()]

@@ -38,3 +38,30 @@ func redirect_to_game(game_slug: String, entry_payload: Dictionary = {}, skip_ex
 ## Redirects the player to the explore page of the Jest platform.
 func redirect_to_explore_page() -> void:
 	_bridge.redirect_to_explore_page()
+
+
+## Redirects the player to another game owned by the same team as the calling game.
+## game_slug: slug identifier of the target game (required).
+## entry_payload: custom data to pass to the target game.
+## skip_exit_confirm: if true, skips the exit confirmation dialog.
+## Must be awaited: var result = await JestSDK.navigation.redirect_to_team_game("other-game")
+func redirect_to_team_game(game_slug: String, entry_payload: Dictionary = {}, skip_exit_confirm: bool = false) -> JestResult:
+	if game_slug.strip_edges().is_empty():
+		return JestResult.failure("game_slug cannot be empty")
+
+	var message := {
+		"gameSlug": game_slug,
+		"skipGameExitConfirm": skip_exit_confirm
+	}
+	if not entry_payload.is_empty():
+		message["entryPayload"] = JSON.stringify(entry_payload)
+
+	var cb_result: Dictionary = await _bridge.redirect_to_team_game(JSON.stringify(message))
+	if cb_result["timed_out"]:
+		return JestResult.failure("internal_error")
+	if not cb_result["error"].is_empty():
+		return JestResult.failure("internal_error")
+	var d := JestUtils.parse_json_dict(cb_result["result"])
+	if d.get("result", "") == "error":
+		return JestResult.failure(str(d.get("error", "internal_error")))
+	return JestResult.success()
