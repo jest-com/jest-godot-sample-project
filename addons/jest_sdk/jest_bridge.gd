@@ -430,6 +430,18 @@ func get_player_signed() -> Dictionary:
 	return await _wait_for_callback(cb_id, TIMEOUT_DEFAULT)
 
 
+func redirect_to_team_game(options_json: String) -> Dictionary:
+	if not _is_web:
+		return {"result": _mock.get_redirect_to_team_game_response(options_json), "error": "", "timed_out": false}
+	var opts = _parse_json_to_js(options_json)
+	if opts == null:
+		return {"result": "", "error": "invalid_json", "timed_out": false}
+	var promise = _sdk.redirectToTeamGame(opts)
+	var cb_id := _generate_callback_id()
+	_setup_promise_callback(promise, cb_id, true)
+	return await _wait_for_callback(cb_id, TIMEOUT_DEFAULT)
+
+
 func get_feature_flag(key: String) -> Dictionary:
 	if not _is_web:
 		return {"result": "", "error": "", "timed_out": false}
