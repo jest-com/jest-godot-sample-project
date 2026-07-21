@@ -731,7 +731,7 @@ func _on_begin_subscription_pressed():
 	var result := await JestSDK.payment.begin_subscription(sku)
 	_hide_loading()
 	if result.status == JestSubscriptionResult.Status.SUCCESS:
-		_show_toast("Subscribed: %s (%s)" % [result.subscription.name, result.subscription.billing_period])
+		_show_toast("Subscribed: %s (%s, trial eligible: %s)" % [result.subscription.name, result.subscription.billing_period, result.subscription.trial_eligible])
 	elif result.status == JestSubscriptionResult.Status.CANCELED:
 		_show_toast("Subscription canceled")
 	else:

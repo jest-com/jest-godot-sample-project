@@ -15,6 +15,9 @@ var price: float = 0.0
 var currency: String = ""
 ## Billing period: "monthly", "yearly", or "weekly".
 var billing_period: String = ""
+## Whether the wallet is eligible for this subscription's free trial: it has a
+## trial configured and the wallet has never subscribed to it before.
+var trial_eligible: bool = false
 
 
 static func from_dict(d: Dictionary) -> JestSubscription:
@@ -27,4 +30,5 @@ static func from_dict(d: Dictionary) -> JestSubscription:
 	s.price = float(d.get("price", 0.0))
 	s.currency = str(d.get("currency", ""))
 	s.billing_period = str(d.get("billingPeriod", ""))
+	s.trial_eligible = bool(d.get("trialEligible", false))
 	return s
