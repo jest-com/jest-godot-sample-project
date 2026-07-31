@@ -484,6 +484,8 @@ func show_registration_overlay(options: JestRegistrationOverlayOptions) -> JestR
 		opts_js.theme = options.theme
 		if not options.entry_payload.is_empty():
 			opts_js.entryPayload = _parse_json_to_js(JSON.stringify(options.entry_payload))
+		if not options.message.is_empty():
+			opts_js.message = options.message
 
 	var close_cb = JavaScriptBridge.create_callback(func(_args: Array):
 		_overlay_handles.erase(conversation_id)

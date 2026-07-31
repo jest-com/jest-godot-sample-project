@@ -15,4 +15,11 @@ func _init(bridge: JestBridge) -> void:
 ## has closed (either in response to `close_button_action()` or because the
 ## platform dismissed the overlay itself).
 func show(options: JestRegistrationOverlayOptions = null) -> JestRegistrationOverlayHandle:
+	if options != null:
+		var err := options.validate()
+		if not err.is_empty():
+			push_error("[JestSDK] %s" % err)
+			var handle := JestRegistrationOverlayHandle.new(_bridge, "")
+			handle._on_error(err)
+			return handle
 	return _bridge.show_registration_overlay(options)
