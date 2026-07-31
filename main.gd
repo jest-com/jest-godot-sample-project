@@ -405,6 +405,7 @@ func _on_show_registration_overlay_pressed():
 	var opts := JestRegistrationOverlayOptions.new()
 	opts.theme = "dark"
 	opts.entry_payload = {"source": "godot_sample_registration_overlay"}
+	opts.message = "Join the game! {{registrationCode}} is my code."
 	opts.on_close = func():
 		custom_registration_overlay.visible = false
 		_registration_overlay_handle = null
