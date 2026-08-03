@@ -721,6 +721,11 @@ func _setup_subscription_section():
 	btn.pressed.connect(_on_begin_subscription_pressed)
 	content.add_child(btn)
 
+	var retention_btn := Button.new()
+	retention_btn.text = "Claim Retention Offer"
+	retention_btn.pressed.connect(_on_claim_retention_offer_pressed)
+	content.add_child(retention_btn)
+
 
 func _on_begin_subscription_pressed():
 	var sku := _subscription_sku_input.text.strip_edges()
@@ -736,6 +741,20 @@ func _on_begin_subscription_pressed():
 		_show_toast("Subscription canceled")
 	else:
 		_show_toast("Subscription error: %s" % result.error)
+
+
+func _on_claim_retention_offer_pressed():
+	var sku := _subscription_sku_input.text.strip_edges()
+	if sku.is_empty():
+		_show_toast("SKU is required")
+		return
+	_show_loading()
+	var result := await JestSDK.payment.claim_retention_offer(sku)
+	_hide_loading()
+	if result.status == JestSubscriptionResult.Status.SUCCESS:
+		_show_toast("Retention offer claimed: %s" % result.subscription.name)
+	else:
+		_show_toast("Retention offer error: %s" % result.error)
 
 
 # --- Loading ---

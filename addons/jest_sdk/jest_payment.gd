@@ -75,6 +75,29 @@ func begin_subscription(sku: String) -> JestSubscriptionResult:
 	return JestSubscriptionResult.from_dict(d)
 
 
+## Claims the subscription's configured retention discount for the player's existing
+## subscription. Applied instantly — no checkout.
+## Must be awaited: var result = await JestSDK.payment.claim_retention_offer("premium_monthly")
+## [br]Each player can claim a subscription's retention discount only once, and not
+## while an introductory offer window is still running; otherwise the call fails
+## with error "not_eligible".
+func claim_retention_offer(sku: String) -> JestSubscriptionResult:
+	if sku.strip_edges().is_empty():
+		return JestSubscriptionResult.make_error("invalid_sku")
+	var cb_result: Dictionary = await _bridge.claim_retention_offer(sku)
+	if cb_result["timed_out"]:
+		return JestSubscriptionResult.make_error("timeout")
+	if not cb_result["error"].is_empty():
+		return JestSubscriptionResult.make_error(cb_result["error"])
+	var json_str: String = cb_result["result"]
+	if json_str.is_empty():
+		return JestSubscriptionResult.make_error("empty_response")
+	var d := JestUtils.parse_json_dict(json_str)
+	if d.is_empty():
+		return JestSubscriptionResult.make_error("parse_error")
+	return JestSubscriptionResult.from_dict(d)
+
+
 ## Retrieves incomplete purchases that have not yet been completed.
 ## Must be awaited: var result = await JestSDK.payment.get_incomplete_purchases()
 func get_incomplete_purchases() -> JestIncompletePurchasesResult:
