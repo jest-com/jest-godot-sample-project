@@ -15,6 +15,9 @@ var price: float = 0.0
 var currency: String = ""
 ## Billing period: "monthly", "yearly", or "weekly".
 var billing_period: String = ""
+## Retention discount claimable once via [code]JestSDK.payment.claim_retention_offer[/code].
+## Empty when none available. Keys: "price" (float), "durationPeriods" (int).
+var retention_offer: Dictionary = {}
 
 
 static func from_dict(d: Dictionary) -> JestSubscription:
@@ -27,4 +30,6 @@ static func from_dict(d: Dictionary) -> JestSubscription:
 	s.price = float(d.get("price", 0.0))
 	s.currency = str(d.get("currency", ""))
 	s.billing_period = str(d.get("billingPeriod", ""))
+	var retention = d.get("retentionOffer", null)
+	s.retention_offer = retention if retention is Dictionary else {}
 	return s
