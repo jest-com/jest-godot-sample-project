@@ -11,6 +11,8 @@ extends Resource
 @export var reminder_message: Dictionary = {}
 ## Custom data payload.
 @export var entry_payload: Dictionary = {}
+## Slug of a public game the login link should log the user into, instead of the onboarding's flagship game.
+@export var target_game_slug: String = ""
 
 
 ## Validates this options object. Returns empty string if valid, error message otherwise.

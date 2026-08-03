@@ -34,6 +34,8 @@ func reserve_login_message(options: JestLoginMessageOptions) -> JestLoginReserva
 		json_obj["reminderMessage"] = options.reminder_message
 	if not options.entry_payload.is_empty():
 		json_obj["entryPayload"] = options.entry_payload
+	if not options.target_game_slug.is_empty():
+		json_obj["targetGameSlug"] = options.target_game_slug
 
 	var cb_result: Dictionary = await _bridge.reserve_login_message(JSON.stringify(json_obj))
 	if cb_result.get("timed_out", false):
