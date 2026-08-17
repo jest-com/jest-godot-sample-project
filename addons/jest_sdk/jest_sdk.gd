@@ -15,6 +15,9 @@ var is_initialized: bool:
 var is_web: bool:
 	get: return _bridge._is_web
 
+## Provides access to app visibility and platform exit events.
+var lifecycle: JestLifecycle
+
 ## Provides access to player-related functionality and data.
 var player: JestPlayer
 
@@ -50,6 +53,7 @@ var _bridge: JestBridge
 func _ready() -> void:
 	_bridge = JestBridge.new()
 	_bridge.setup(get_tree())
+	lifecycle = JestLifecycle.new(_bridge)
 	player = JestPlayer.new(_bridge, func(k: String, v: String):
 		player_data_changed.emit(k, v)
 	)

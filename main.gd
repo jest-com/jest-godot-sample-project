@@ -143,6 +143,11 @@ func _connect_signals():
 	open_dialog_button.pressed.connect(_on_open_dialog_pressed)
 	list_referrals_button.pressed.connect(_on_list_referrals_pressed)
 
+	# App Lifecycle
+	JestSDK.lifecycle.hidden.connect(_on_app_hidden)
+	JestSDK.lifecycle.shown.connect(_on_app_shown)
+	JestSDK.lifecycle.exit_requested.connect(_on_app_exit_requested)
+
 
 
 # --- Login ---
@@ -504,6 +509,20 @@ func _on_list_referrals_pressed():
 
 	_show_toast("Loaded %d referrals" % result.referrals.size())
 
+
+
+# --- App Lifecycle ---
+
+func _on_app_hidden():
+	_show_toast("App hidden")
+
+
+func _on_app_shown():
+	_show_toast("App shown")
+
+
+func _on_app_exit_requested():
+	_show_toast("Exit requested")
 
 
 # --- Bots ---
