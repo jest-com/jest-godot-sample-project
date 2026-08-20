@@ -22,7 +22,10 @@ func get_products() -> Array[JestProduct]:
 ## Must be awaited: var result = await JestSDK.payment.begin_purchase("gems_100")
 ## [br][b]Sandbox testing:[/b] sandbox users see real product prices in the game UI,
 ## but the platform checkout modal makes clear that no charge will be made and the
-## resulting purchase records 0 credits.
+## resulting purchase records 0 credits. Such a purchase carries [code]sandbox: true[/code]
+## — in the SDK payload and in the signed JWS — so your backend can grant the item
+## while keeping test traffic out of revenue reporting. Purchases driven from the
+## Developer Console simulator carry the same flag, at their configured price.
 func begin_purchase(sku: String) -> JestPurchaseResult:
 	if sku.strip_edges().is_empty():
 		return JestPurchaseResult.make_error("invalid_sku")

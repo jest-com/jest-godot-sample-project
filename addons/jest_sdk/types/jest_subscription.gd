@@ -15,6 +15,9 @@ var price: float = 0.0
 var currency: String = ""
 ## Billing period: "monthly", "yearly", or "weekly".
 var billing_period: String = ""
+## True when no money can change hands: the player is a sandbox user, or this
+## came from the Developer Console simulator. False for real players.
+var sandbox: bool = false
 
 
 static func from_dict(d: Dictionary) -> JestSubscription:
@@ -27,4 +30,5 @@ static func from_dict(d: Dictionary) -> JestSubscription:
 	s.price = float(d.get("price", 0.0))
 	s.currency = str(d.get("currency", ""))
 	s.billing_period = str(d.get("billingPeriod", ""))
+	s.sandbox = bool(d.get("sandbox", false))
 	return s

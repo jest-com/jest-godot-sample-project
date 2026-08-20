@@ -267,7 +267,8 @@ func _on_buy_pressed(sku: String):
 	var result := await JestSDK.payment.begin_purchase(sku)
 	_hide_loading()
 	if result.ok:
-		_show_toast("Purchase successful: %s" % result.purchase.product_sku)
+		var sandbox_note := " (sandbox)" if result.purchase.sandbox else ""
+		_show_toast("Purchase successful: %s%s" % [result.purchase.product_sku, sandbox_note])
 	elif result.status == JestPurchaseResult.Status.CANCELED:
 		_show_toast("Purchase canceled")
 	else:
@@ -731,7 +732,8 @@ func _on_begin_subscription_pressed():
 	var result := await JestSDK.payment.begin_subscription(sku)
 	_hide_loading()
 	if result.status == JestSubscriptionResult.Status.SUCCESS:
-		_show_toast("Subscribed: %s (%s)" % [result.subscription.name, result.subscription.billing_period])
+		var sandbox_note := " (sandbox)" if result.subscription.sandbox else ""
+		_show_toast("Subscribed: %s (%s)%s" % [result.subscription.name, result.subscription.billing_period, sandbox_note])
 	elif result.status == JestSubscriptionResult.Status.CANCELED:
 		_show_toast("Subscription canceled")
 	else:
