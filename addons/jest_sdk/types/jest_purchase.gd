@@ -17,6 +17,9 @@ var estimated_revenue: float = 0.0
 var price: float = 0.0
 ## ISO currency code for the price, e.g. "USD", "EUR".
 var currency: String = ""
+## True when no money changed hands: a sandbox user made the purchase, or it
+## came from the Developer Console simulator. False on real purchases.
+var sandbox: bool = false
 
 
 static func from_dict(d: Dictionary) -> JestPurchase:
@@ -30,4 +33,5 @@ static func from_dict(d: Dictionary) -> JestPurchase:
 	p.estimated_revenue = float(d.get("estimatedRevenue", 0.0))
 	p.price = float(d.get("price", 0.0))
 	p.currency = str(d.get("currency", ""))
+	p.sandbox = bool(d.get("sandbox", false))
 	return p
