@@ -11,7 +11,7 @@ var credits: float = 0.0
 var created_at: int = 0
 ## Unix timestamp when purchase was completed. 0 if not yet completed.
 var completed_at: int = 0
-## The estimated USD share of revenue from this purchase that the publisher will receive.
+## Approximate revenue in USD for the game publisher.
 var estimated_revenue: float = 0.0
 ## Price paid for this purchase in the specified currency, in decimal.
 var price: float = 0.0
