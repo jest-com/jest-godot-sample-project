@@ -21,6 +21,8 @@ var mock_subscription_succeeds: bool = true
 ## Configure mock products JSON.
 var mock_products_json: String = '[{"sku":"gems_100","name":"100 Gems","description":"Get 100 gems","price":99.0,"currency":"USD"},{"sku":"gems_500","name":"500 Gems","description":"Get 500 gems","price":499.0,"currency":"USD"}]'
 
+const DEFAULT_MOCK_PRODUCT_PRICE := 100.0
+
 var _player_values: Dictionary = {}
 var _notifications: Array[Dictionary] = []
 var _entry_payload: String = "{}"
@@ -76,12 +78,24 @@ func get_products() -> String:
 	return mock_products_json
 
 
-func get_purchase_response() -> String:
+func get_purchase_response(sku: String) -> String:
 	_log("begin_purchase")
 	if mock_purchase_succeeds:
-		return '{"result":"success","purchase":{"purchaseToken":"mock_token","productSku":"gems_100","credits":99,"createdAt":1761729039,"completedAt":null,"estimatedRevenue":69.30,"price":99.0,"currency":"USD"},"purchaseSigned":"mock_jws"}'
+		var product := _find_mock_product(sku)
+		var price: float = float(product.get("price", DEFAULT_MOCK_PRODUCT_PRICE)) if not product.is_empty() else DEFAULT_MOCK_PRODUCT_PRICE
+		var currency: String = str(product.get("currency", "USD")) if not product.is_empty() else "USD"
+		return '{"result":"success","purchase":{"purchaseToken":"mock_token","productSku":"%s","credits":%s,"createdAt":1761729039,"completedAt":null,"estimatedRevenue":0,"price":%s,"currency":"%s"},"purchaseSigned":"mock_jws"}' % [sku, price, price, currency]
 	else:
 		return '{"result":"cancel"}'
+
+
+func _find_mock_product(sku: String) -> Dictionary:
+	var products = JSON.parse_string(mock_products_json)
+	if products is Array:
+		for product in products:
+			if product is Dictionary and product.get("sku") == sku:
+				return product
+	return {}
 
 
 func get_subscription_response() -> String:

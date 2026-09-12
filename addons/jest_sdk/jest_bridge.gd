@@ -348,7 +348,7 @@ func get_products() -> Dictionary:
 
 func begin_purchase(sku: String) -> Dictionary:
 	if not _is_web:
-		return {"result": _mock.get_purchase_response(), "error": "", "timed_out": false}
+		return {"result": _mock.get_purchase_response(sku), "error": "", "timed_out": false}
 	var opts = JavaScriptBridge.create_object("Object")
 	opts.productSku = sku
 	var promise = _sdk_payments.beginPurchase(opts)
