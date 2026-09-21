@@ -30,7 +30,7 @@ func schedule(options: JestNotificationOptions) -> void:
 		payload["assetReference"] = resolved_asset_ref
 	if not options.entry_payload.is_empty():
 		payload["entryPayload"] = options.entry_payload
-	if options.scheduled_in_days > 0:
+	if options.scheduled_in_days >= 0:
 		payload["scheduledInDays"] = options.scheduled_in_days
 	elif not options.date.is_empty():
 		payload["scheduledAt"] = options.date

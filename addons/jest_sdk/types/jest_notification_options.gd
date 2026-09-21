@@ -23,8 +23,8 @@ const CTA_CHAR_LIMIT := 50
 @export var entry_payload: Dictionary = {}
 ## ISO 8601 date string (e.g., "2024-01-15T10:00:00Z"). Mutually exclusive with scheduled_in_days.
 @export var date: String = ""
-## Days from now, 1-7. Mutually exclusive with date.
-@export_range(0, 7) var scheduled_in_days: int = 0
+## Days from now, 0-7 (0 delivers later today, at least 10 minutes out). -1 (default) means unset. Mutually exclusive with date.
+@export_range(-1, 7) var scheduled_in_days: int = -1
 
 
 ## Validates this options object. Returns empty string if valid, error message otherwise.
@@ -36,11 +36,11 @@ func validate() -> String:
 	if cta_text.length() > CTA_CHAR_LIMIT: return "cta_text must be %d characters or fewer" % CTA_CHAR_LIMIT
 	if identifier.is_empty(): return "identifier is required"
 	var has_date := not date.is_empty()
-	var has_days := scheduled_in_days > 0
+	var has_days := scheduled_in_days >= 0
 	if not has_date and not has_days: return "Either date or scheduled_in_days must be provided"
 	if has_date and has_days: return "date and scheduled_in_days are mutually exclusive"
-	if has_days and (scheduled_in_days < 1 or scheduled_in_days > 7):
-		return "scheduled_in_days must be between 1 and 7"
+	if has_days and scheduled_in_days > 7:
+		return "scheduled_in_days must be between 0 and 7"
 	if has_date:
 		var date_dict := Time.get_datetime_dict_from_datetime_string(date, false)
 		if date_dict.is_empty():
