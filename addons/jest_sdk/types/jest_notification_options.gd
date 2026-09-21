@@ -13,8 +13,8 @@ const CTA_CHAR_LIMIT := 50
 @export var cta_text: String = ""
 ## Unique identifier for rescheduling/unscheduling (required).
 @export var identifier: String = ""
-## Notification importance level.
-@export_enum("low", "medium", "high", "critical") var priority: String = "low"
+## Notification importance level. Defaults to "medium".
+@export_enum("low", "medium", "high", "critical") var priority: String = "medium"
 ## Pre-approved asset reference (image or video). Preferred over image_reference.
 @export var asset_reference: String = ""
 ## Deprecated. Use asset_reference instead.
