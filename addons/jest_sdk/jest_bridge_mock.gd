@@ -106,6 +106,14 @@ func open_referral_dialog(options_json: String) -> void:
 	_log("open_referral_dialog: %s" % options_json)
 
 
+func share_image(options_json: String) -> void:
+	var parsed = JSON.parse_string(options_json)
+	var has_image := false
+	if parsed is Dictionary:
+		has_image = not (parsed.get("image", "") as String).is_empty()
+	_log("share_image hasImage=%s" % str(has_image))
+
+
 func get_list_referrals_response() -> String:
 	_log("list_referrals")
 	return '{"referrals":[],"referralsSigned":""}'

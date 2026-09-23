@@ -604,6 +604,11 @@ func _setup_player_avatar_section():
 	btn.pressed.connect(_on_get_player_avatar_pressed)
 	content.add_child(btn)
 
+	var share_btn := Button.new()
+	share_btn.text = "Share Image"
+	share_btn.pressed.connect(_on_share_image_pressed)
+	content.add_child(share_btn)
+
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	content.add_child(row)
@@ -634,6 +639,16 @@ func _on_get_profile_pressed():
 		username if not username.is_empty() else "(none)",
 		avatar_url if not avatar_url.is_empty() else "(none)",
 	])
+
+
+func _on_share_image_pressed():
+	_show_loading()
+	var result := await JestSDK.social.share_image("", {"source": "godot_sample"})
+	_hide_loading()
+	if result.ok:
+		_show_toast("Shared" if not result.canceled else "Share canceled")
+	else:
+		_show_toast("Error: %s" % result.error)
 
 
 func _on_get_player_avatar_pressed():
