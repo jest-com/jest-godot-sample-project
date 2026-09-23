@@ -31,6 +31,7 @@ var _sdk_data: JavaScriptObject    # window.JestSDK.data
 var _sdk_payments: JavaScriptObject
 var _sdk_notifications: JavaScriptObject
 var _sdk_referrals: JavaScriptObject
+var _sdk_social: JavaScriptObject
 var _sdk_internal: JavaScriptObject
 var _json: JavaScriptObject        # window.JSON
 var _data_helper: JavaScriptObject # Wrapper to avoid set/get name collision with Object
@@ -96,6 +97,7 @@ func init_sdk(options: Dictionary = {}) -> bool:
 	_sdk_payments = _sdk.payments
 	_sdk_notifications = _sdk.notifications
 	_sdk_referrals = _sdk.referrals
+	_sdk_social = _sdk.social
 	_sdk_internal = _sdk.internal
 
 	# Get the data helper bridge injected by the export plugin.
@@ -396,6 +398,19 @@ func open_referral_dialog(options_json: String) -> Dictionary:
 	if opts == null:
 		return {"result": "", "error": "invalid_json", "timed_out": false}
 	var promise = _sdk_referrals.shareReferralLink(opts)
+	var cb_id := _generate_callback_id()
+	_setup_promise_callback(promise, cb_id, true)
+	return await _wait_for_callback(cb_id, TIMEOUT_NONE)
+
+
+func share_image(options_json: String) -> Dictionary:
+	if not _is_web:
+		_mock.share_image(options_json)
+		return {"result": '{"canceled":false}', "error": "", "timed_out": false}
+	var opts = _parse_json_to_js(options_json)
+	if opts == null:
+		return {"result": "", "error": "invalid_json", "timed_out": false}
+	var promise = _sdk_social.shareImage(opts)
 	var cb_id := _generate_callback_id()
 	_setup_promise_callback(promise, cb_id, true)
 	return await _wait_for_callback(cb_id, TIMEOUT_NONE)
