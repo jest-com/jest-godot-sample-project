@@ -52,6 +52,31 @@ func send_reserved_login_message(reservation: Dictionary) -> void:
 	_bridge.send_reserved_login_message(JSON.stringify(reservation))
 
 
+## Reserves a link that opens the game in the external browser, carrying the analytics id.
+## Must be awaited: var result = await JestSDK.internal_api.reserve_browser_continuation_link()
+## Errors: "no_target_game", "could_not_reserve".
+func reserve_browser_continuation_link(entry_payload: Dictionary = {}) -> JestLoginReservation:
+	var options_json := ""
+	if not entry_payload.is_empty():
+		options_json = JSON.stringify({"entryPayload": entry_payload})
+
+	var cb_result: Dictionary = await _bridge.reserve_browser_continuation_link(options_json)
+	if cb_result.get("timed_out", false):
+		return JestLoginReservation.make_error("timeout")
+	if not cb_result.get("error", "").is_empty():
+		return JestLoginReservation.make_error(cb_result["error"])
+	var d := JestUtils.parse_json_dict(cb_result.get("result", ""))
+	return JestLoginReservation.from_dict(d)
+
+
+## Opens a link reserved with reserve_browser_continuation_link(). Call from a user gesture.
+func open_reserved_browser_continuation_link(reservation: Dictionary) -> void:
+	if reservation.is_empty():
+		push_error("[JestSDK] reservation cannot be empty")
+		return
+	_bridge.open_reserved_browser_continuation_link(JSON.stringify(reservation))
+
+
 ## Captures an onboarding analytics event.
 func capture_onboarding_event(event: String, properties: Dictionary = {}) -> void:
 	if not event in VALID_ONBOARDING_EVENTS:

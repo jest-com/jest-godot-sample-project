@@ -312,6 +312,16 @@ func send_reserved_login_message(reservation_json: String) -> void:
 		_sdk_internal.sendReservedLoginMessage(opts)
 
 
+func open_reserved_browser_continuation_link(reservation_json: String) -> void:
+	if not _is_web:
+		if _verbose:
+			print("[JestSDK] Open reserved browser continuation link (mock)")
+		return
+	var opts = _parse_json_to_js(reservation_json)
+	if opts != null:
+		_sdk_internal.openReservedBrowserContinuationLink(opts)
+
+
 func capture_onboarding_event(event: String, properties_json: String) -> void:
 	if not _is_web:
 		if _verbose:
@@ -446,6 +456,22 @@ func reserve_login_message(options_json: String) -> Dictionary:
 	if opts == null:
 		return {"result": "", "error": "invalid_json", "timed_out": false}
 	var promise = _sdk_internal.reserveLoginMessageAsync(opts)
+	var cb_id := _generate_callback_id()
+	_setup_promise_callback(promise, cb_id, true)
+	return await _wait_for_callback(cb_id, TIMEOUT_DEFAULT)
+
+
+func reserve_browser_continuation_link(options_json: String) -> Dictionary:
+	if not _is_web:
+		return {"result": '{"reservation":{"__type":"BrowserContinuationReservation","__token":"mock-token"}}', "error": "", "timed_out": false}
+	var promise
+	if options_json.is_empty():
+		promise = _sdk_internal.reserveBrowserContinuationLink()
+	else:
+		var opts = _parse_json_to_js(options_json)
+		if opts == null:
+			return {"result": "", "error": "invalid_json", "timed_out": false}
+		promise = _sdk_internal.reserveBrowserContinuationLink(opts)
 	var cb_id := _generate_callback_id()
 	_setup_promise_callback(promise, cb_id, true)
 	return await _wait_for_callback(cb_id, TIMEOUT_DEFAULT)
