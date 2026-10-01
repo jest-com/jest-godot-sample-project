@@ -336,7 +336,11 @@ func _on_schedule_pressed():
 	opts.body = notif_body_input.text.strip_edges()
 	opts.cta_text = notif_cta_input.text.strip_edges()
 	opts.identifier = notif_identifier_input.text.strip_edges()
-	opts.image_reference = notif_image_input.text.strip_edges()
+	var image_text := notif_image_input.text.strip_edges()
+	if image_text.begins_with("data:"):
+		opts.asset = image_text
+	else:
+		opts.image_reference = image_text
 
 	var entry_text := notif_entry_payload_input.text.strip_edges()
 	if entry_text != "":

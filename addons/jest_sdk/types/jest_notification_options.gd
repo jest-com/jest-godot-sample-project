@@ -4,6 +4,12 @@ extends Resource
 const BODY_CHAR_LIMIT := 2000
 const TITLE_CHAR_LIMIT := 200
 const CTA_CHAR_LIMIT := 50
+const INLINE_ASSET_MAX_BASE64_LENGTH := 2 * 1024 * 1024
+const INLINE_ASSET_MIME_PREFIXES := [
+	"data:image/png;base64,",
+	"data:image/jpeg;base64,",
+	"data:image/webp;base64,",
+]
 
 ## Notification body text (required, up to 2000 chars).
 @export var body: String = ""
@@ -19,6 +25,9 @@ const CTA_CHAR_LIMIT := 50
 @export var asset_reference: String = ""
 ## Deprecated. Use asset_reference instead.
 @export var image_reference: String = ""
+## Base64 data URL (png, jpeg, or webp, at most 2MB), moderated before delivery.
+## Mutually exclusive with asset_reference and image_reference.
+@export var asset: String = ""
 ## Custom data payload passed when the notification is opened.
 @export var entry_payload: Dictionary = {}
 ## ISO 8601 date string (e.g., "2024-01-15T10:00:00Z"). Mutually exclusive with scheduled_in_days.
@@ -35,6 +44,12 @@ func validate() -> String:
 	if cta_text.is_empty(): return "cta_text is required"
 	if cta_text.length() > CTA_CHAR_LIMIT: return "cta_text must be %d characters or fewer" % CTA_CHAR_LIMIT
 	if identifier.is_empty(): return "identifier is required"
+	if not asset.is_empty():
+		if not INLINE_ASSET_MIME_PREFIXES.any(func(prefix: String) -> bool: return asset.begins_with(prefix)):
+			return "asset must be a base64 data URL with MIME image/png, image/jpeg, or image/webp"
+		if asset.length() > INLINE_ASSET_MAX_BASE64_LENGTH: return "asset must be at most 2MB"
+		if not asset_reference.is_empty() or not image_reference.is_empty():
+			return "asset and asset_reference are mutually exclusive"
 	var has_date := not date.is_empty()
 	var has_days := scheduled_in_days > 0
 	if not has_date and not has_days: return "Either date or scheduled_in_days must be provided"
